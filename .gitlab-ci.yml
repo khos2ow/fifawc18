@@ -1,0 +1,9 @@
+image: khos2ow/dind-git-java
+
+stages:
+  - test
+  - deploy
+
+test:
+  script:
+    - echo "TBA"
