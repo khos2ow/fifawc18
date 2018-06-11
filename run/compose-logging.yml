@@ -1,0 +1,32 @@
+version: '2.2'
+
+services:
+  # Logging components
+  elasticsearch:
+    image: elasticsearch:5.2-alpine
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+
+  logstash:
+    image: logstash:5.2-alpine
+    command: logstash -f /logging/logstash.conf 
+    ports:
+      - "12201:12201/udp"
+      - "4260:4260/tcp"
+    volumes:
+      - ./logging/:/logging/
+    depends_on:
+      - elasticsearch
+
+  kibana:
+    image: kibana:5.2
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
+    environment:
+      ELASTICSEARCH_URL: "http://elasticsearch:9200"
+

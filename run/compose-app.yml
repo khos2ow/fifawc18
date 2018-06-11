@@ -1,11 +1,20 @@
 version: '2.2'
 
 services:
+  # Nginx
+  nginx:
+    image: nginx:latest
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    
   # Application
   app:
-    image: registry.gitlab.com/khos2ow/fifawc18 
-    ports:
-      - 8080:8080
+    image: registry.gitlab.com/khos2ow/fifawc18:latest
+    restart: always
     environment:
       - DATABASE_HOST=mysql
       - DATABASE_PORT=3306
@@ -19,6 +28,7 @@ services:
   # Database
   mysql:
     image: mysql:latest
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: fifawc18
@@ -29,3 +39,4 @@ services:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       timeout: 20s
       retries: 10
+
