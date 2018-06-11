@@ -1,0 +1,57 @@
+spring:
+  application:
+    name: FIFA World Cup 2018 Prediction Game
+
+  profiles:
+    active:
+      - ${profiles.active:@profile.active@}
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+
+server:
+  port: 8080
+
+management:
+  server:
+    port: 9000
+
+logging:
+  level:
+    org:
+      springframework:
+        retry: ${log.level:@log.level@}
+
+    io:
+      khosrow:
+        fifawc: ${log.level:@log.level@}
+
+---
+
+spring:
+  profiles: dev
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/fifawc18?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false
+    username: root
+    password: cloudops
+
+  jpa:
+    hibernate:
+      ddlAuto: update
+
+---
+
+spring:
+  profiles: prod
+
+  datasource:
+    url: jdbc:mysql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
