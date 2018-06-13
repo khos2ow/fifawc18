@@ -1,4 +1,4 @@
-image: khos2ow/dind-git-java
+image: khos2ow/ci-cd-tools
 
 stages:
   - test
