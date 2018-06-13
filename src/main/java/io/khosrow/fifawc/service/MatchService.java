@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import io.khosrow.fifawc.common.dto.MatchDTO;
+import io.khosrow.fifawc.common.util.Stage;
 import io.khosrow.fifawc.domain.Group;
 import io.khosrow.fifawc.repo.MatchRepository;
 
@@ -19,6 +20,26 @@ public class MatchService {
     @Autowired
     public MatchService(MatchRepository repository) {
         this.repository = repository;
+    }
+
+    /**
+     * Get list of matches in provided stage
+     * 
+     * @param name of the stage to look up match for
+     * 
+     * @return list of MatchDTO of current Stage
+     */
+    public List<MatchDTO> getMatchesByStage(String name) {
+        Stage stage = Stage.of(name);
+
+        if (stage == null) {
+            return Collections.emptyList();
+        }
+
+        return repository.findByStage(stage)
+                .stream()
+                .map(MatchDTO::of)
+                .collect(Collectors.toList());
     }
 
     /**

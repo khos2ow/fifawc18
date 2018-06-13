@@ -50,11 +50,11 @@ INSERT IGNORE INTO standing(uuid, group_id, team_id, games, wins, draws, loses, 
 INSERT IGNORE INTO standing(uuid, group_id, team_id, games, wins, draws, loses, goals_for, goals_against, goals_diff, points) VALUES(UUID(), 6, 7, 0, 0, 0, 0, 0, 0, 0, 0);
 
 INSERT IGNORE INTO standing(uuid, group_id, team_id, games, wins, draws, loses, goals_for, goals_against, goals_diff, points) VALUES(UUID(), 7, 6, 0, 0, 0, 0, 0, 0, 0, 0);
-INSERT IGNORE INTO standing(uuid, group_id, team_id, games, wins, draws, loses, goals_for, goals_against, goals_diff, points) VALUES(UUID(), 7, 20, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT IGNORE INTO standing(uuid, group_id, team_id, games, wins, draws, loses, goals_for, goals_against, goals_diff, points) VALUES(UUID(), 7, 23, 0, 0, 0, 0, 0, 0, 0, 0);
 INSERT IGNORE INTO standing(uuid, group_id, team_id, games, wins, draws, loses, goals_for, goals_against, goals_diff, points) VALUES(UUID(), 7, 26, 0, 0, 0, 0, 0, 0, 0, 0);
 INSERT IGNORE INTO standing(uuid, group_id, team_id, games, wins, draws, loses, goals_for, goals_against, goals_diff, points) VALUES(UUID(), 7, 10, 0, 0, 0, 0, 0, 0, 0, 0);
 
-INSERT IGNORE INTO standing(uuid, group_id, team_id, games, wins, draws, loses, goals_for, goals_against, goals_diff, points) VALUES(UUID(), 8, 10, 0, 0, 0, 0, 0, 0, 0, 0);
-INSERT IGNORE INTO standing(uuid, group_id, team_id, games, wins, draws, loses, goals_for, goals_against, goals_diff, points) VALUES(UUID(), 8, 20, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT IGNORE INTO standing(uuid, group_id, team_id, games, wins, draws, loses, goals_for, goals_against, goals_diff, points) VALUES(UUID(), 8, 14, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT IGNORE INTO standing(uuid, group_id, team_id, games, wins, draws, loses, goals_for, goals_against, goals_diff, points) VALUES(UUID(), 8, 24, 0, 0, 0, 0, 0, 0, 0, 0);
 INSERT IGNORE INTO standing(uuid, group_id, team_id, games, wins, draws, loses, goals_for, goals_against, goals_diff, points) VALUES(UUID(), 8, 21, 0, 0, 0, 0, 0, 0, 0, 0);
 INSERT IGNORE INTO standing(uuid, group_id, team_id, games, wins, draws, loses, goals_for, goals_against, goals_diff, points) VALUES(UUID(), 8, 4, 0, 0, 0, 0, 0, 0, 0, 0);

@@ -21,4 +21,14 @@ public enum Stage {
     private Stage(final String title) {
         this.title = title;
     }
+
+    public static Stage of(String stage) {
+        for (Stage s : values()) {
+            if (s.name().equals(stage)) {
+                return s;
+            }
+        }
+
+        return null;
+    }
 }
