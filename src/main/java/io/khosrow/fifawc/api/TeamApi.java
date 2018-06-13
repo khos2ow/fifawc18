@@ -29,6 +29,6 @@ public class TeamApi {
 
     @GetMapping("/{id}")
     public TeamDTO getTeamByUuid(@PathVariable(value = "id") String uuid) {
-        return service.getTeamById(uuid);
+        return service.getTeamDtoById(uuid);
     }
 }

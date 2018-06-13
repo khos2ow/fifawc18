@@ -10,8 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 import lombok.Data;
 import lombok.experimental.NonFinal;
@@ -27,8 +25,6 @@ public class Standing implements Comparable<Standing> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank
-    @Size(max = 36)
     @Column(length = 36)
     private String uuid;
 
@@ -40,31 +36,28 @@ public class Standing implements Comparable<Standing> {
     @JoinColumn(name = "team_id")
     private Team team;
 
-    @NotBlank
+    @Column(name = "games")
     private Integer games;
 
-    @NotBlank
+    @Column(name = "wins")
     private Integer wins;
 
-    @NotBlank
+    @Column(name = "draws")
     private Integer draws;
 
-    @NotBlank
+    @Column(name = "loses")
     private Integer loses;
 
-    @NotBlank
     @Column(name = "goals_for")
     private Integer goalsFor;
 
-    @NotBlank
     @Column(name = "goals_against")
     private Integer goalsAgainst;
 
-    @NotBlank
     @Column(name = "goals_diff")
     private Integer goalsDiff;
 
-    @NotBlank
+    @Column(name = "points")
     private Integer points;
 
     @Override

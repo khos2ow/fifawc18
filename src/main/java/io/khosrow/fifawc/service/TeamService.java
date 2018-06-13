@@ -1,6 +1,7 @@
 package io.khosrow.fifawc.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.google.common.base.Strings;
 
 import io.khosrow.fifawc.common.dto.TeamDTO;
+import io.khosrow.fifawc.domain.Team;
 import io.khosrow.fifawc.repo.TeamRepository;
 
 @Service
@@ -27,8 +29,19 @@ public class TeamService {
      * 
      * @return TeamDTO instance
      */
-    public TeamDTO getTeamById(String uuid) {
-        return TeamDTO.of(repository.findByUuid(uuid));
+    public Optional<Team> getTeamById(String uuid) {
+        return repository.findByUuid(uuid);
+    }
+
+    /**
+     * Find a Team by its UUID
+     * 
+     * @param uuid to look for
+     * 
+     * @return TeamDTO instance
+     */
+    public TeamDTO getTeamDtoById(String uuid) {
+        return TeamDTO.of(getTeamById(uuid));
     }
 
     /**

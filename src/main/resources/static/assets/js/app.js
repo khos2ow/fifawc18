@@ -9,13 +9,13 @@
         }, 1250, 'easeInOutExpo');
         event.preventDefault();
     });
-    
+
     // Highlight the top nav as scrolling occurs
     $('body').scrollspy({
         target: '.navbar-fixed-top',
         offset: 51
     });
-    
+
     // Offset for Main Navigation
     $('#mainNav').affix({
         offset: {
@@ -49,10 +49,10 @@
                         '<table class="table">',
                             '<thead>',
                                 '<tr>',
-                                    '<th style="width: 250px;">&nbsp;</th>',
-                                    '<th>&nbsp;</th>',
-                                    '<th style="width: 50px;">&nbsp;</th>',
-                                    '<th>&nbsp;</th>',
+                                    '<th class="match-time">&nbsp;</th>',
+                                    '<th class="match-home">&nbsp;</th>',
+                                    '<th class="match-result">&nbsp;</th>',
+                                    '<th class="match-away">&nbsp;</th>',
                                 '</tr>',
                             '</thead>',
                             '<tbody></tbody>',
@@ -62,16 +62,16 @@
                         '<table class="table">',
                             '<thead>',
                                 '<tr>',
-                                    '<th>#</th>',
+                                    '<th class="narrow-column">#</th>',
                                     '<th>Team</th>',
-                                    '<th title="Games">G</th>',
-                                    '<th title="Wins">W</th>',
-                                    '<th title="Draws">D</th>',
-                                    '<th title="Loses">L</th>',
-                                    '<th title="Goals For">GF</th>',
-                                    '<th title="Goals Against">GA</th>',
-                                    '<th title="Goals Difference">GD</th>',
-                                    '<th title="Points">P</th>',
+                                    '<th class="narrow-column" title="Games">G</th>',
+                                    '<th class="narrow-column" title="Wins">W</th>',
+                                    '<th class="narrow-column" title="Draws">D</th>',
+                                    '<th class="narrow-column" title="Loses">L</th>',
+                                    '<th class="narrow-column" title="Goals For">GF</th>',
+                                    '<th class="narrow-column" title="Goals Against">GA</th>',
+                                    '<th class="narrow-column" title="Goals Difference">GD</th>',
+                                    '<th class="narrow-column" title="Points">P</th>',
                                 '</tr>',
                             '</thead>',
                             '<tbody></tbody>',
@@ -87,19 +87,19 @@
         $.each(value.standing, function(k, v) {
             $('.tab-pane#' + value.uuid + ' .group-standing .table tbody').append($([
                 '<tr>',
-                    '<th scope="row">' + (k+1) + '</th>',
+                    '<th class="text-center" scope="row">' + (k+1) + '</th>',
                     '<td>', 
                         '<img src="' + v.team.country.flag + '" style="width: 20px; margin-right: 5px;" />', 
                         '<span>' + v.team.country.name + '</span>', 
                     '</td>',
-                    '<td>' + v.games + '</td>',
-                    '<td>' + v.wins + '</td>',
-                    '<td>' + v.draws + '</td>',
-                    '<td>' + v.loses + '</td>',
-                    '<td>' + v.goalsFor + '</td>',
-                    '<td>' + v.goalsAgainst + '</td>',
-                    '<td>' + v.goalsDiff + '</td>',
-                    '<td>' + v.points + '</td>',
+                    '<td class="text-center">' + v.games + '</td>',
+                    '<td class="text-center">' + v.wins + '</td>',
+                    '<td class="text-center">' + v.draws + '</td>',
+                    '<td class="text-center">' + v.loses + '</td>',
+                    '<td class="text-center">' + v.goalsFor + '</td>',
+                    '<td class="text-center">' + v.goalsAgainst + '</td>',
+                    '<td class="text-center">' + v.goalsDiff + '</td>',
+                    '<td class="text-center">' + v.points + '</td>',
                 '</tr>'
             ].join('')));
         });
@@ -111,21 +111,21 @@
             $.each(data, function(k, v) {
                 $('.tab-pane#' + value.uuid + ' .group-matches .table tbody').append($([
                     '<tr>',
-                        '<td class="text-left">',
+                        '<td class="match-time text-left">',
                             new Date(v.matchDate).toDateString(),
                             ' - ',
                             new Date(v.matchDate).toLocaleTimeString().replace(/:00 /, ' '),
                         '</td>',
-                        '<td class="text-right">', 
+                        '<td class="match-home text-right">', 
                             v.team1Goals != null && v.team2Goals != null && v.team1Goals > v.team2Goals ? '<b>' : '', 
                             '<span>' + v.team1.country.name + '</span>', 
                             '<img src="' + v.team1.country.flag + '" style="width: 20px; margin-left: 5px;" />', 
                             v.team1Goals != null && v.team2Goals != null && v.team1Goals > v.team2Goals ? '</b>' : '', 
                         '</td>',
-                        '<td class="text-center">', 
+                        '<td class="match-result text-center">', 
                             v.team1Goals == null || v.team2Goals == null ? '-' : v.team1Goals + '-' + v.team2Goals, 
                         '</td>',
-                        '<td class="text-left">', 
+                        '<td class="match-away text-left">', 
                             v.team1Goals != null && v.team2Goals != null && v.team2Goals > v.team1Goals ? '<b>' : '', 
                             '<img src="' + v.team2.country.flag + '" style="width: 20px; margin-right: 5px;" />', 
                             '<span>' + v.team2.country.name + '</span>', 
@@ -168,7 +168,20 @@
         // populate KO stages
         $.get('/api/matches?stage=' + value.name, function(data) {
             $.each(data, function(k, v) {
-                $('.' + value.cls + ' .matches').append($([
+            	var team1Winner = false;
+            	var team2Winner = false;
+
+            	if ( v.team1Goals != null && v.team2Goals != null ) {
+            		if ( v.team1Goals == v.team2Goals ) {
+            			team1Winner = v.team1PenaltyGoals > v.team2PenaltyGoals;
+            			team2Winner = v.team2PenaltyGoals > v.team1PenaltyGoals;
+            		} else {
+            			team1Winner = v.team1Goals > v.team2Goals;
+            			team2Winner = v.team2Goals > v.team1Goals;
+            		}
+            	}
+
+            	$('.' + value.cls + ' .matches').append($([
                     '<div>',
                         '<div>',
                             new Date(v.matchDate).toDateString(),
@@ -181,20 +194,20 @@
                                 '<div class="match-content-team">',
                                     v.team1 != null ?
                                         [
-                                            v.team1Goals != null && v.team2Goals != null && v.team1Goals > v.team2Goals ? '<b>' : '', 
+                                        	team1Winner ? '<b>' : '', 
                                             '<img src="' + v.team1.country.flag + '" style="width: 20px; margin-right: 5px;" />',
                                             '<span>' + v.team1.country.name + '</span>',
-                                            v.team1Goals != null && v.team2Goals != null && v.team1Goals > v.team2Goals ? '</b>' : ''
+                                            team1Winner ? '</b>' : ''
                                         ].join('')
                                     : v.team1Indicator,
                                 '</div>',
                                 '<div class="match-content-team">',
                                     v.team2 != null ?
                                         [
-                                            v.team1Goals != null && v.team2Goals != null && v.team2Goals > v.team1Goals ? '<b>' : '', 
+                                        	team2Winner ? '<b>' : '', 
                                             '<img src="' + v.team2.country.flag + '" style="width: 20px; margin-right: 5px;" />',
                                             '<span>' + v.team2.country.name + '</span>',
-                                            v.team1Goals != null && v.team2Goals != null && v.team2Goals > v.team1Goals ? '</b>' : '', 
+                                            team2Winner ? '</b>' : '', 
                                         ].join('')
                                     : v.team2Indicator,
                                 '</div>',
@@ -203,25 +216,42 @@
                                 '<div class="match-result-score">',
                                     v.team1Goals == null ? '&nbsp;' :
                                     [
-                                        v.team1Goals != null && v.team2Goals != null && v.team1Goals > v.team2Goals ? '<b>' : '',
+                                    	team1Winner ? '<b>' : '',
                                         v.team1Goals, 
-                                        v.team1Goals != null && v.team2Goals != null && v.team1Goals > v.team2Goals ? '</b>' : ''
+                                        team1Winner ? '</b>' : ''
                                     ].join(''), 
                                 '</div>',
                                 '<div class="match-result-score">',
                                     v.team2Goals == null ? '&nbsp;' :
                                     [
-                                        v.team1Goals != null && v.team2Goals != null && v.team2Goals > v.team1Goals ? '<b>' : '',
+                                    	team2Winner ? '<b>' : '',
                                         v.team2Goals, 
-                                        v.team1Goals != null && v.team2Goals != null && v.team2Goals > v.team1Goals ? '</b>' : ''
+                                        team2Winner ? '</b>' : ''
                                     ].join(''), 
                                 '</div>',
                             '</div>', 
+                            '<div class="match-result">',
+	                            '<div class="match-result-score">',
+		                            v.team1PenaltyGoals == null ? '&nbsp;' :
+	                            	[
+	                            		team1Winner ? '<b>' : '',
+                        				v.team1PenaltyGoals, 
+                        				team1Winner ? '</b>' : ''
+                					].join(''), 
+            					'</div>',
+            					'<div class="match-result-score">',
+                					v.team2PenaltyGoals == null ? '&nbsp;' :
+            						[
+            							team2Winner ? '<b>' : '',
+    									v.team2PenaltyGoals, 
+    									team2Winner ? '</b>' : ''
+									].join(''), 
+								'</div>',
+							'</div>', 
                         '</div>',
                     '</div>'
                 ].join('')));
             });
         });
     });
-        
 })(jQuery);

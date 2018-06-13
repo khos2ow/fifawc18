@@ -110,7 +110,7 @@ INSERT IGNORE INTO country(uuid, name, iso2, iso3, flag) VALUES(UUID(), "Hungary
 INSERT IGNORE INTO country(uuid, name, iso2, iso3, flag) VALUES(UUID(), "Iceland", "IS", "ISL", "iceland");
 INSERT IGNORE INTO country(uuid, name, iso2, iso3, flag) VALUES(UUID(), "India", "IN", "IND", "india");
 INSERT IGNORE INTO country(uuid, name, iso2, iso3, flag) VALUES(UUID(), "Indonesia", "ID", "IDN", "indonesia");
-INSERT IGNORE INTO country(uuid, name, iso2, iso3, flag) VALUES(UUID(), "Iran, Islamic Republic of", "IR", "IRN", "iran");
+INSERT IGNORE INTO country(uuid, name, iso2, iso3, flag) VALUES(UUID(), "Iran", "IR", "IRN", "iran");
 INSERT IGNORE INTO country(uuid, name, iso2, iso3, flag) VALUES(UUID(), "Iraq", "IQ", "IRQ", "iraq");
 INSERT IGNORE INTO country(uuid, name, iso2, iso3, flag) VALUES(UUID(), "Ireland", "IE", "IRL", "ireland");
 INSERT IGNORE INTO country(uuid, name, iso2, iso3, flag) VALUES(UUID(), "Isle of Man", "IM", "IMN", "isle_of_man");

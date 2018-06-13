@@ -434,6 +434,24 @@ header .header-content .header-content-inner p {
     }
 }
 
+.group-matches .match-time {
+	width: 250px;
+}
+.group-matches .match-home,
+.group-matches .match-away {
+	width: -webkit-calc(50% - 150px);
+	width: -moz-calc(50% - 150px);
+	width: calc(50% - 150px);	
+}
+.group-matches .match-result {
+	width: 50px;
+}
+
+.group-standing .narrow-column {
+	width: 50px;
+	text-align: center;
+}
+
 .ko-match {
   width: 100%;
   height: 62px;
@@ -455,7 +473,7 @@ header .header-content .header-content-inner p {
   vertical-align: middle;
 }
 .ko-match .match-result {
-  width: 50px;
+  width: 30px;
   height: 100%;
   display: table-cell;
   text-align: center;

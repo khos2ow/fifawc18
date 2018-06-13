@@ -6,8 +6,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 import lombok.Data;
 import lombok.experimental.NonFinal;
@@ -23,11 +21,9 @@ public class Group {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank
-    @Size(max = 36)
     @Column(length = 36)
     private String uuid;
 
-    @NotBlank
+    @Column(name = "name")
     private String name;
 }

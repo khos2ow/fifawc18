@@ -18,9 +18,11 @@ public class MatchDTO {
     private TeamDTO team1;
     private String team1Indicator;
     private Integer team1Goals;
+    private Integer team1PenaltyGoals;
     private TeamDTO team2;
     private String team2Indicator;
     private Integer team2Goals;
+    private Integer team2PenaltyGoals;
     private Date matchDate;
 
     public String getStage() {

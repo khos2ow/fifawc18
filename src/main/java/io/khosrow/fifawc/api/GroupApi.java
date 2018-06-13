@@ -30,12 +30,12 @@ public class GroupApi {
 
     @GetMapping(params = {"name"})
     public GroupDTO getGroupByName(@RequestParam(name = "name", required = true) String name) {
-        return service.getGroupByName(name);
+        return service.getGroupWithStandingByName(name);
     }
 
     @GetMapping("/{id}")
     public GroupDTO getGroupByUuid(@PathVariable(value = "id") String uuid) {
-        return service.getGroupByUuid(uuid);
+        return service.getGroupWithStandingByUuid(uuid);
     }
 
     @GetMapping("/{id}/matches")

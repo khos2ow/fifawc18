@@ -10,8 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 import lombok.Data;
 import lombok.experimental.NonFinal;
@@ -27,8 +25,6 @@ public class Team {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank
-    @Size(max = 36)
     @Column(length = 36)
     private String uuid;
 

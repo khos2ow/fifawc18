@@ -24,7 +24,7 @@ public class GroupService {
         this.standingService = standingService;
         this.matchService = matchService;
     }
-
+    
     /**
      * Find a Group by its UUID
      * 
@@ -32,10 +32,10 @@ public class GroupService {
      * 
      * @return GroupDTO instance
      */
-    public GroupDTO getGroupByUuid(String uuid) {
-        return getGroupStanding(repository.findByUuid(uuid));
+    public Optional<Group> getGroupByUuid(String uuid) {
+        return repository.findByUuid(uuid);
     }
-
+    
     /**
      * Find a Group by its name
      * 
@@ -43,8 +43,30 @@ public class GroupService {
      * 
      * @return GroupDTO instance
      */
-    public GroupDTO getGroupByName(String name) {
-        return getGroupStanding(repository.findByName(name));
+    public Optional<Group> getGroupByName(String name) {
+        return repository.findByName(name);
+    }
+
+    /**
+     * Find a Group with Standing by its UUID
+     * 
+     * @param uuid to look for
+     * 
+     * @return GroupDTO instance
+     */
+    public GroupDTO getGroupWithStandingByUuid(String uuid) {
+        return getGroupStanding(getGroupByUuid(uuid));
+    }
+
+    /**
+     * Find a Group with Standing by its name
+     * 
+     * @param name to look for
+     * 
+     * @return GroupDTO instance
+     */
+    public GroupDTO getGroupWithStandingByName(String name) {
+        return getGroupStanding(getGroupByName(name));
     }
 
     /**
@@ -67,7 +89,18 @@ public class GroupService {
      * @return list of MatchDTO of current Group
      */
     public List<MatchDTO> getGroupMatchesByUuid(String uuid) {
-        return matchService.getMatchesByGroup(repository.findByUuid(uuid));
+        return matchService.getMatchesByGroup(getGroupByUuid(uuid));
+    }
+
+    /**
+     * Get list of matches in provided group
+     * 
+     * @param name of Group to look up match for
+     * 
+     * @return list of MatchDTO of current Group
+     */
+    public List<MatchDTO> getGroupMatchesByName(String name) {
+        return matchService.getMatchesByGroup(getGroupByName(name));
     }
 
     /**

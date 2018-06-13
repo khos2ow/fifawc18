@@ -6,8 +6,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 import lombok.Data;
 import lombok.experimental.NonFinal;
@@ -23,23 +21,18 @@ public class Country {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank
-    @Size(max = 36)
     @Column(length = 36)
     private String uuid;
 
-    @NotBlank
+    @Column(name = "name")
     private String name;
 
-    @NotBlank
     @Column(name = "iso2", length = 2)
     private String iso2;
 
-    @NotBlank
     @Column(name = "iso3", length = 3)
     private String iso3;
 
-    @NotBlank
     @Column(name = "flag")
     private String flag;
 }
