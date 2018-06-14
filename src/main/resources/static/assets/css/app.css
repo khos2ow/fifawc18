@@ -517,3 +517,21 @@ header .header-content .header-content-inner p {
 .ko-final .matches > div:first-child {
   margin-top: 395px;
 }
+
+
+.btn-predict, 
+.btn-user, 
+.btn-logout {
+  display: none;
+}
+
+.user-avatar {
+  border-radius: 50%;
+  width: 30px;
+  margin-right: 15px;
+}
+
+.leaderboards tbody tr th, 
+.leaderboards tbody tr td {
+  vertical-align: middle;
+}

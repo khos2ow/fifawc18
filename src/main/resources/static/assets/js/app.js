@@ -26,6 +26,45 @@
     // Initialize WOW.js Scrolling Animations
     new WOW().init();
 
+//	$.ajaxSetup({
+//		beforeSend: function(xhr, settings) {
+//			if (settings.type == 'POST' || settings.type == 'PUT' || settings.type == 'DELETE') {
+//				if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+//					// Only send the token to relative URLs i.e. locally.
+//					xhr.setRequestHeader("X-XSRF-TOKEN", Cookies.get('XSRF-TOKEN'));
+//				}
+//			}
+//		}
+//	});
+
+    var predictionMode = window.location.href.indexOf('/predict') > -1 ? true : false;
+
+    $.get('/user', function(data) {
+        $('.navbar .btn-login').hide();
+        $('.navbar .btn-predict').show();
+        $('.navbar .btn-user').show();
+        $('.navbar .btn-user').append($([
+            '<a>',
+                '<img class="user-avatar" src="' + data.photo + '" style="width: 25px;">',
+                '<span>', data.fullName, '</span>',
+            '</a>'
+        ].join('')));
+        $('.navbar .btn-logout').show();
+    }).fail(function() {
+        $('.navbar .btn-login').show();
+        $('.navbar .btn-predict').hide();
+        $('.navbar .btn-user').hide();
+        $('.navbar .btn-user').empty();
+        $('.navbar .btn-logout').hide();
+    });
+
+    $('.btn-logout').click(function(e) {
+        e.preventDefault();
+        $.post('/logout', function(data) {
+            window.location.href = "/";
+        });
+    });
+
     var populateTab = function(key, value) {
         var active = key == 0 ? ' active' : '';
 
@@ -254,4 +293,22 @@
             });
         });
     });
+
+    if ( !predictionMode ) {
+        // populate KO stages
+        $.get('/api/leaderboard', function(data) {
+            $.each(data, function(key, value) {
+            	$('.leaderboards tbody').append($([
+                    '<tr>',
+                        '<th class="text-center" scope="row">' + (key+1) + '</th>',
+                        '<td>',
+                            '<img class="user-avatar" src="' + value.photo + '" title="' + value.fullName + '" />',
+                            value.fullName,
+                        '</td>',
+                        '<td>', value.points, '</td>',
+                    '</tr>'
+                ].join('')));
+            });
+        });
+    }
 })(jQuery);
