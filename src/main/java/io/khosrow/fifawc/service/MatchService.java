@@ -30,6 +30,15 @@ public class MatchService {
     }
 
     /**
+     * Get list of all the matches
+     * 
+     * @return list of Match
+     */
+    public List<Match> getAllMaches() {
+        return repository.findAll();
+    }
+
+    /**
      * Get list of matches in provided stage
      * 
      * @param name of the stage to look up match for

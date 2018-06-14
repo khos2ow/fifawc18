@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import io.khosrow.fifawc.common.dto.UserDTO;
+import io.khosrow.fifawc.domain.User;
 import io.khosrow.fifawc.repo.UserRepository;
 
 @Service
@@ -16,8 +17,14 @@ public class UserService {
         this.repository = repository;
     }
 
+    public User getUserByPrincipalId(String principalId) {
+        return repository.findByPrincipalId(principalId);
+    }
+
     /**
-     * @return
+     * Get sorted list of Leadernoard
+     * 
+     * @return list of leaderbord
      */
     public List<UserDTO> getLeaderboard() {
         return repository.findAll()
