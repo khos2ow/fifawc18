@@ -423,9 +423,9 @@
                             ],
                         '</td>',
                         '<td class="match-away text-left">', 
-                            value.team1 == null ?
+                            value.team2 == null ?
                             [
-                                value.team1Indicator
+                                value.team2Indicator
                             ] :
                             [
                                 team2Winner ? '<b>' : '', 
