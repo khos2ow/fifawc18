@@ -80,7 +80,8 @@ p {
 section {
   padding: 20px 0;
 }
-section#group-stage {
+section#group-stage,
+section#matches {
   margin-top: 80px;
 }
 aside {

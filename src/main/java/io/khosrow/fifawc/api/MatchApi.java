@@ -37,6 +37,11 @@ public class MatchApi {
         return service.getMatchesByStage(stage);
     }
 
+    @GetMapping(params = {"sort"})
+    public List<MatchDTO> getMatchesSorted(@RequestParam(name = "sort", required = true) String sort) {
+        return service.getMatchesSorted(sort);
+    }
+
     @PostMapping("/{id}")
     public MatchDTO saveMatchResult(@PathVariable(value = "id") String uuid, @RequestBody MatchDTO payload) {
         return service.saveMatchResult(uuid, payload);

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.google.common.base.Strings;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
@@ -72,6 +74,29 @@ public class MatchService {
 
         return repository.findByGroupId(group.get().getId())
                 .stream()
+                .map(MatchDTO::of)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Get list of matches in provided group
+     * 
+     * @param group instance look up match for
+     * 
+     * @return list of MatchDTO of current Group
+     */
+    public List<MatchDTO> getMatchesSorted(String sort) {
+        return repository.findAll()
+                .stream()
+                .sorted((m1, m2) -> {
+                    if (!Strings.isNullOrEmpty(sort)) {
+                        if (sort.equals("date")) {
+                            return m1.getMatchDate().compareTo(m2.getMatchDate());
+                        }
+                    }
+
+                    return m1.getId().compareTo(m2.getId());
+                })
                 .map(MatchDTO::of)
                 .collect(Collectors.toList());
     }
