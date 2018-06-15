@@ -1,21 +1,6 @@
 (function($) {
     "use strict";
 
-    // jQuery for page scrolling feature - requires jQuery Easing plugin
-    $('a.page-scroll').bind('click', function(event) {
-        var $anchor = $(this);
-        $('html, body').stop().animate({
-            scrollTop: ($($anchor.attr('href')).offset().top - 50)
-        }, 1250, 'easeInOutExpo');
-        event.preventDefault();
-    });
-
-    // Highlight the top nav as scrolling occurs
-    $('body').scrollspy({
-        target: '.navbar-fixed-top',
-        offset: 51
-    });
-
     // Offset for Main Navigation
     $('#mainNav').affix({
         offset: {
@@ -23,23 +8,10 @@
         }
     });
 
-    // Initialize WOW.js Scrolling Animations
-    new WOW().init();
-
-//	$.ajaxSetup({
-//		beforeSend: function(xhr, settings) {
-//			if (settings.type == 'POST' || settings.type == 'PUT' || settings.type == 'DELETE') {
-//				if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
-//					// Only send the token to relative URLs i.e. locally.
-//					xhr.setRequestHeader("X-XSRF-TOKEN", Cookies.get('XSRF-TOKEN'));
-//				}
-//			}
-//		}
-//	});
-
     var predictionMode = window.location.href.indexOf('/predict') > -1 ? true : false;
     var predictionApiPrefix = predictionMode ? 'predictions/' : '';
     var matchesMode = window.location.href.indexOf('/matches') > -1 ? true : false;
+    var leaderboardMode = window.location.href.indexOf('/leaderboard') > -1 ? true : false;
 
     $.get('/user', function(data) {
         $('.navbar .btn-login').hide();
@@ -381,7 +353,7 @@
         });
     }
 
-    if ( !predictionMode && !matchesMode ) {
+    if ( leaderboardMode ) {
         // populate KO stages
         $.get('/api/leaderboard', function(data) {
             $.each(data, function(key, value) {
