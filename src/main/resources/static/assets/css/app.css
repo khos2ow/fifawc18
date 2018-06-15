@@ -81,6 +81,7 @@ section {
   padding: 20px 0;
 }
 section#group-stage,
+section#leaderboard,
 section#matches {
   margin-top: 80px;
 }
