@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 
 import io.khosrow.fifawc.common.util.Stage;
 import io.khosrow.fifawc.domain.Match;
+import io.khosrow.fifawc.domain.Prediction;
 import lombok.Data;
 
 @Data
@@ -35,5 +36,9 @@ public class MatchDTO {
 
     public static MatchDTO of(Optional<Match> match) {
         return of(match.orElse(Match.NULL));
+    }
+
+    public static MatchDTO of(Prediction prediction) {
+        return new ModelMapper().map(prediction, MatchDTO.class);
     }
 }

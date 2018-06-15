@@ -1,4 +1,4 @@
-package io.khosrow.fifawc;
+package io.khosrow.fifawc.common.config;
 
 import java.time.LocalDateTime;
 
@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import io.khosrow.fifawc.common.util.UserLoginType;
 import io.khosrow.fifawc.domain.User;
@@ -31,8 +30,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
             .permitAll()
 
         .and()
-            .csrf()
-            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+            .csrf().disable();
     }
 
     @Bean

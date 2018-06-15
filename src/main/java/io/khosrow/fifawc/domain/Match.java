@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import io.khosrow.fifawc.common.util.IMatch;
 import io.khosrow.fifawc.common.util.Stage;
 import lombok.Data;
 import lombok.experimental.NonFinal;
@@ -22,8 +23,8 @@ import lombok.experimental.NonFinal;
 @Entity
 @Table(name = "matches")
 @Data
-public class Match {
-    public static final Match NULL = new Match();
+public class Match implements IMatch {
+    public static final Match NULL = Match.buildNull();
 
     @Id
     @NonFinal
@@ -72,4 +73,10 @@ public class Match {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "match_date")
     private Date matchDate;
+
+    private static Match buildNull() {
+        Match m = new Match();
+        m.setStage(Stage.NULL);
+        return m;
+    }
 }

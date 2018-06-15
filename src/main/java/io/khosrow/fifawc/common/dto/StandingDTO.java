@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 
+import io.khosrow.fifawc.domain.PredictionStanding;
 import io.khosrow.fifawc.domain.Standing;
 import lombok.Data;
 
@@ -25,5 +26,9 @@ public class StandingDTO {
 
     public static StandingDTO of(Optional<Standing> standing) {
         return of(standing.orElse(Standing.NULL));
+    }
+
+    public static StandingDTO of(PredictionStanding standing) {
+        return new ModelMapper().map(standing, StandingDTO.class);
     }
 }

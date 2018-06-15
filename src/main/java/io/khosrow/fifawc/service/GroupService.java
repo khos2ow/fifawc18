@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import io.khosrow.fifawc.common.dto.GroupDTO;
 import io.khosrow.fifawc.common.dto.MatchDTO;
 import io.khosrow.fifawc.domain.Group;
+import io.khosrow.fifawc.domain.User;
 import io.khosrow.fifawc.repo.GroupRepository;
 
 @Service
@@ -55,7 +56,7 @@ public class GroupService {
      * @return GroupDTO instance
      */
     public GroupDTO getGroupWithStandingByUuid(String uuid) {
-        return getGroupStanding(getGroupByUuid(uuid));
+        return getGroupStanding(getGroupByUuid(uuid), null);
     }
 
     /**
@@ -66,7 +67,7 @@ public class GroupService {
      * @return GroupDTO instance
      */
     public GroupDTO getGroupWithStandingByName(String name) {
-        return getGroupStanding(getGroupByName(name));
+        return getGroupStanding(getGroupByName(name), null);
     }
 
     /**
@@ -77,7 +78,21 @@ public class GroupService {
     public List<GroupDTO> getAllGroups() {
         return repository.findAll()
                 .stream()
-                .map(g -> getGroupStanding(Optional.of(g)))
+                .map(g -> getGroupStanding(Optional.of(g), null))
+                .collect(Collectors.toList());
+    }
+    
+    /**
+     * Find all groups details for User
+     * 
+     * @param user to filter for
+     * 
+     * @return list of GroupDTO
+     */
+    public List<GroupDTO> getAllGroups(User user) {
+        return repository.findAll()
+                .stream()
+                .map(g -> getGroupStanding(Optional.of(g), user))
                 .collect(Collectors.toList());
     }
 
@@ -110,11 +125,11 @@ public class GroupService {
      * 
      * @return GroupDTO instance with full standing list
      */
-    private GroupDTO getGroupStanding(Optional<Group> group) {
+    private GroupDTO getGroupStanding(Optional<Group> group, User user) {
         final GroupDTO dto = GroupDTO.of(group);
 
         if (group.isPresent()) {
-            dto.setStanding(standingService.getStandingByGroupId(group.get().getId()));
+            dto.setStanding(standingService.getStandingByGroupId(group.get().getId(), user));
         }
 
         return dto;

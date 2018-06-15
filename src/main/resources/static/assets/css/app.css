@@ -439,12 +439,12 @@ header .header-content .header-content-inner p {
 }
 .group-matches .match-home,
 .group-matches .match-away {
-	width: -webkit-calc(50% - 150px);
-	width: -moz-calc(50% - 150px);
-	width: calc(50% - 150px);	
+	width: -webkit-calc(50% - 162.5px);
+	width: -moz-calc(50% - 162.5px);
+	width: calc(50% - 162.5px);	
 }
 .group-matches .match-result {
-	width: 50px;
+	width: 75px;
 }
 
 .group-standing .narrow-column {
@@ -534,4 +534,9 @@ header .header-content .header-content-inner p {
 .leaderboards tbody tr th, 
 .leaderboards tbody tr td {
   vertical-align: middle;
+}
+
+.team-goal-input {
+  width: 25px;
+  text-align: center;
 }

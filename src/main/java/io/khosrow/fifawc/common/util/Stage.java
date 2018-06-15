@@ -13,7 +13,9 @@ public enum Stage {
 
     PLAYOFF("Play-off for third place"),
 
-    FINAL("Final");
+    FINAL("Final"), 
+
+    NULL("Null");
 
     @Getter
     private final String title;

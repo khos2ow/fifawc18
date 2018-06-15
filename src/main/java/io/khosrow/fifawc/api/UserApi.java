@@ -23,6 +23,7 @@ public class UserApi {
         User entity = service.getUserByPrincipalId(user.getPrincipalId());
 
         predictionService.generatePredictionForNewUser(entity);
+        predictionService.generatePredictionStandingForNewUser(entity);
 
         return user;
     }

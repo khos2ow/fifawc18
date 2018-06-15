@@ -38,6 +38,7 @@
 //	});
 
     var predictionMode = window.location.href.indexOf('/predict') > -1 ? true : false;
+    var predictionApiPrefix = predictionMode ? 'predictions/' : '';
 
     $.get('/user', function(data) {
         $('.navbar .btn-login').hide();
@@ -50,12 +51,16 @@
             '</a>'
         ].join('')));
         $('.navbar .btn-logout').show();
+
+        populateContent();
     }).fail(function() {
         $('.navbar .btn-login').show();
         $('.navbar .btn-predict').hide();
         $('.navbar .btn-user').hide();
         $('.navbar .btn-user').empty();
         $('.navbar .btn-logout').hide();
+
+        populateContent();
     });
 
     $('.btn-logout').click(function(e) {
@@ -145,7 +150,7 @@
     };
 
     var populateGroupMatches = function(key, value) {
-        $.get('/api/groups/' + value.uuid + '/matches', function(data) {
+        $.get('/api/' + predictionApiPrefix + 'groups/' + value.uuid + '/matches', function(data) {
             // group standing table
             $.each(data, function(k, v) {
                 $('.tab-pane#' + value.uuid + ' .group-matches .table tbody').append($([
@@ -161,8 +166,14 @@
                             '<img src="' + v.team1.country.flag + '" style="width: 20px; margin-left: 5px;" />', 
                             v.team1Goals != null && v.team2Goals != null && v.team1Goals > v.team2Goals ? '</b>' : '', 
                         '</td>',
-                        '<td class="match-result text-center">', 
-                            v.team1Goals == null || v.team2Goals == null ? '-' : v.team1Goals + '-' + v.team2Goals, 
+                        '<td class="match-result text-center">',
+                            predictionMode ? 
+                            [
+                                '<input class="team-goal-input team-goal-input-team1-goals prediction-match-' + v.number + '" data-match-team="team1-goals" data-match-number="' + v.number + '" type="text" />',
+                                '-',
+                                '<input class="team-goal-input team-goal-input-team2-goals prediction-match-' + v.number + '" data-match-team="team2-goals" data-match-number="' + v.number + '" type="text" />'
+                            ].join('') :
+                            v.team1Goals == null || v.team2Goals == null ? '-' : v.team1Goals + '-' + v.team2Goals,
                         '</td>',
                         '<td class="match-away text-left">', 
                             v.team1Goals != null && v.team2Goals != null && v.team2Goals > v.team1Goals ? '<b>' : '', 
@@ -176,123 +187,194 @@
         });
     };
 
-    // populate groups
-    $.get('/api/groups', function(data) {
-        $.each(data, function(key, value) {
-            populateTab(key, value);
-            populateTabContent(key, value);
-            populateStandings(key, value);
-            populateGroupMatches(key, value);
-        });
-    });
+    var populateContent = function() {
+	    // populate groups
+	    $.get('/api/' + predictionApiPrefix + 'groups', function(data) {
+	        $.each(data, function(key, value) {
+	            populateTab(key, value);
+	            populateTabContent(key, value);
+	            populateStandings(key, value);
+	            populateGroupMatches(key, value);
+	        });
+	    }).then(function() {
+	        var stages = [{
+	            name: 'ROUND_SIXTEEN', 
+	            cls: 'ko-sixteen'
+	        }, {
+	            name: 'QUARTER_FINALS', 
+	            cls: 'ko-quarters'
+	        }, {
+	            name: 'SEMI_FINALS', 
+	            cls: 'ko-semis'
+	        }, {
+	            name: 'PLAYOFF', 
+	            cls: 'ko-playoff'
+	        }, {
+	            name: 'FINAL', 
+	            cls: 'ko-final'
+	        }];
 
-    var stages = [{
-        name: 'ROUND_SIXTEEN', 
-        cls: 'ko-sixteen'
-    }, {
-        name: 'QUARTER_FINALS', 
-        cls: 'ko-quarters'
-    }, {
-        name: 'SEMI_FINALS', 
-        cls: 'ko-semis'
-    }, {
-        name: 'PLAYOFF', 
-        cls: 'ko-playoff'
-    }, {
-        name: 'FINAL', 
-        cls: 'ko-final'
-    }];
+	        $.each(stages, function(key, value) {
+	            // populate KO stages
+	            $.get('/api/' + predictionApiPrefix + 'matches?stage=' + value.name, function(data) {
+	                $.each(data, function(k, v) {
+	                    var team1Winner = false;
+	                    var team2Winner = false;
 
-    $.each(stages, function(key, value) {
-        // populate KO stages
-        $.get('/api/matches?stage=' + value.name, function(data) {
-            $.each(data, function(k, v) {
-            	var team1Winner = false;
-            	var team2Winner = false;
+	                    if ( v.team1Goals != null && v.team2Goals != null ) {
+	                        if ( v.team1Goals == v.team2Goals ) {
+	                            team1Winner = v.team1PenaltyGoals > v.team2PenaltyGoals;
+	                            team2Winner = v.team2PenaltyGoals > v.team1PenaltyGoals;
+	                        } else {
+	                            team1Winner = v.team1Goals > v.team2Goals;
+	                            team2Winner = v.team2Goals > v.team1Goals;
+	                        }
+	                    }
 
-            	if ( v.team1Goals != null && v.team2Goals != null ) {
-            		if ( v.team1Goals == v.team2Goals ) {
-            			team1Winner = v.team1PenaltyGoals > v.team2PenaltyGoals;
-            			team2Winner = v.team2PenaltyGoals > v.team1PenaltyGoals;
-            		} else {
-            			team1Winner = v.team1Goals > v.team2Goals;
-            			team2Winner = v.team2Goals > v.team1Goals;
-            		}
-            	}
+	                    var disabled = v.team1 == null || v.team2 == null ? ' disabled="disabled"' : '';
 
-            	$('.' + value.cls + ' .matches').append($([
-                    '<div>',
-                        '<div>',
-                            new Date(v.matchDate).toDateString(),
-                            ' - ',
-                            new Date(v.matchDate).toLocaleTimeString().replace(/:00 /, ' '),
-                        '</div>',
-                        '<div class="ko-match">',
-                            '<div class="match-number">' + v.number + '</div>', 
-                            '<div class="match-content">',
-                                '<div class="match-content-team">',
-                                    v.team1 != null ?
-                                        [
-                                        	team1Winner ? '<b>' : '', 
-                                            '<img src="' + v.team1.country.flag + '" style="width: 20px; margin-right: 5px;" />',
-                                            '<span>' + v.team1.country.name + '</span>',
-                                            team1Winner ? '</b>' : ''
-                                        ].join('')
-                                    : v.team1Indicator,
-                                '</div>',
-                                '<div class="match-content-team">',
-                                    v.team2 != null ?
-                                        [
-                                        	team2Winner ? '<b>' : '', 
-                                            '<img src="' + v.team2.country.flag + '" style="width: 20px; margin-right: 5px;" />',
-                                            '<span>' + v.team2.country.name + '</span>',
-                                            team2Winner ? '</b>' : '', 
-                                        ].join('')
-                                    : v.team2Indicator,
-                                '</div>',
-                            '</div>', 
-                            '<div class="match-result">',
-                                '<div class="match-result-score">',
-                                    v.team1Goals == null ? '&nbsp;' :
-                                    [
-                                    	team1Winner ? '<b>' : '',
-                                        v.team1Goals, 
-                                        team1Winner ? '</b>' : ''
-                                    ].join(''), 
-                                '</div>',
-                                '<div class="match-result-score">',
-                                    v.team2Goals == null ? '&nbsp;' :
-                                    [
-                                    	team2Winner ? '<b>' : '',
-                                        v.team2Goals, 
-                                        team2Winner ? '</b>' : ''
-                                    ].join(''), 
-                                '</div>',
-                            '</div>', 
-                            '<div class="match-result">',
-	                            '<div class="match-result-score">',
-		                            v.team1PenaltyGoals == null ? '&nbsp;' :
-	                            	[
-	                            		team1Winner ? '<b>' : '',
-                        				v.team1PenaltyGoals, 
-                        				team1Winner ? '</b>' : ''
-                					].join(''), 
-            					'</div>',
-            					'<div class="match-result-score">',
-                					v.team2PenaltyGoals == null ? '&nbsp;' :
-            						[
-            							team2Winner ? '<b>' : '',
-    									v.team2PenaltyGoals, 
-    									team2Winner ? '</b>' : ''
-									].join(''), 
-								'</div>',
-							'</div>', 
-                        '</div>',
-                    '</div>'
-                ].join('')));
+	                    $('.' + value.cls + ' .matches').append($([
+	                        '<div>',
+	                            '<div>',
+	                                new Date(v.matchDate).toDateString(),
+	                                ' - ',
+	                                new Date(v.matchDate).toLocaleTimeString().replace(/:00 /, ' '),
+	                            '</div>',
+	                            '<div class="ko-match">',
+	                                '<div class="match-number">' + v.number + '</div>', 
+	                                '<div class="match-content">',
+	                                    '<div class="match-content-team">',
+	                                        v.team1 != null ?
+	                                            [
+	                                                team1Winner ? '<b>' : '', 
+	                                                '<img src="' + v.team1.country.flag + '" style="width: 20px; margin-right: 5px;" />',
+	                                                '<span>' + v.team1.country.name + '</span>',
+	                                                team1Winner ? '</b>' : ''
+	                                            ].join('')
+	                                        : v.team1Indicator,
+	                                    '</div>',
+	                                    '<div class="match-content-team">',
+	                                        v.team2 != null ?
+	                                            [
+	                                                team2Winner ? '<b>' : '', 
+	                                                '<img src="' + v.team2.country.flag + '" style="width: 20px; margin-right: 5px;" />',
+	                                                '<span>' + v.team2.country.name + '</span>',
+	                                                team2Winner ? '</b>' : '', 
+	                                            ].join('')
+	                                        : v.team2Indicator,
+	                                    '</div>',
+	                                '</div>', 
+	                                '<div class="match-result">',
+	                                    '<div class="match-result-score">',
+	                                        predictionMode ? 
+	                                        [
+	                                            '<input class="team-goal-input team-goal-input-team1-goals prediction-match-' + v.number + '" data-match-team="team1-goals" data-match-number="' + v.number + '" type="text"' + disabled + ' />'
+	                                        ].join('') :
+	                                        v.team1Goals == null ? '&nbsp;' :
+	                                        [
+	                                            team1Winner ? '<b>' : '',
+	                                            v.team1Goals, 
+	                                            team1Winner ? '</b>' : ''
+	                                        ].join(''), 
+	                                    '</div>',
+	                                    '<div class="match-result-score">',
+	                                        predictionMode ? 
+	                                        [
+	                                            '<input class="team-goal-input team-goal-input-team2-goals prediction-match-' + v.number + '" data-match-team="team2-goals" data-match-number="' + v.number + '" type="text"' + disabled + ' />'
+	                                        ].join('') :
+	                                        v.team2Goals == null ? '&nbsp;' :
+	                                        [
+	                                            team2Winner ? '<b>' : '',
+	                                            v.team2Goals, 
+	                                            team2Winner ? '</b>' : ''
+	                                        ].join(''), 
+	                                    '</div>',
+	                                '</div>', 
+	                                '<div class="match-result">',
+	                                    '<div class="match-result-score">',
+	                                        predictionMode ? 
+	                                        [
+	                                            '<input class="team-goal-input team-goal-input-team1-penalty-goals prediction-match-' + v.number + '" data-match-team="team1-penalty-goals" data-match-number="' + v.number + '" type="text"' + disabled + ' />'
+	                                        ].join('') :
+	                                        v.team1PenaltyGoals == null ? '&nbsp;' :
+	                                        [
+	                                            team1Winner ? '<b>' : '',
+	                                            v.team1PenaltyGoals, 
+	                                            team1Winner ? '</b>' : ''
+	                                        ].join(''), 
+	                                    '</div>',
+	                                    '<div class="match-result-score">',
+	                                        predictionMode ? 
+	                                        [
+	                                            '<input class="team-goal-input team-goal-input-team2-penalty-goals prediction-match-' + v.number + '" data-match-team="team2-penalty-goals" data-match-number="' + v.number + '" type="text"' + disabled + ' />'
+	                                        ].join('') :
+	                                        v.team2PenaltyGoals == null ? '&nbsp;' :
+	                                        [
+	                                            team2Winner ? '<b>' : '',
+	                                            v.team2PenaltyGoals, 
+	                                            team2Winner ? '</b>' : ''
+	                                        ].join(''), 
+	                                    '</div>',
+	                                '</div>', 
+	                            '</div>',
+	                        '</div>'
+	                    ].join('')));
+	                });
+	            });
+	        });
+	    }).then(function() {
+	        if ( predictionMode ) {
+	            $.get('/api/predictions', function(data) {
+	                $.each(data, function(key, value) {
+	                    $('.team-goal-input.team-goal-input-team1-goals.prediction-match-' + value.number).val(value.team1Goals != null ? value.team1Goals : '');
+	                    $('.team-goal-input.team-goal-input-team2-goals.prediction-match-' + value.number).val(value.team2Goals != null ? value.team2Goals : '');
+	                    $('.team-goal-input.team-goal-input-team1-penalty-goals.prediction-match-' + value.number).val(value.team1PenaltyGoals != null ? value.team1PenaltyGoals : '');
+	                    $('.team-goal-input.team-goal-input-team2-penalty-goals.prediction-match-' + value.number).val(value.team2PenaltyGoals != null ? value.team2PenaltyGoals : '');
+	                });
+	            });
+	        }
+	    });
+	};
+
+    if ( predictionMode ) {
+        $('.save-match-predictions').click(function(el) {
+            el.preventDefault();
+            el.stopPropagation();
+
+            $(el.target).text('Saving Prediction...');
+            $(el.target).addClass('disabled');
+
+            var predictions = [];
+
+            $('.team-goal-input').each(function(k, e) {
+                var $e = $(e);
+                var type = $e.data('match-team');
+                var number = $e.data('match-number');
+                var value = $e.val();
+
+                if ( typeof $e.attr('disabled') === 'undefined' ) {
+	                predictions.push({
+	                    "number": number, 
+	                    "team1Goals": type === 'team1-goals' ? value : null,
+	                    "team1PenaltyGoals": type === 'team1-penalty-goals' ? value : null,
+	                    "team2Goals": type === 'team2-goals' ? value : null,
+	                    "team2PenaltyGoals": type === 'team2-penalty-goals' ? value : null
+	                });
+                }
+            });
+
+            $.ajax({
+                url: '/api/predictions',
+                type: 'POST',
+                dataType: 'json',
+                data: JSON.stringify(predictions),
+                contentType: 'application/json',
+                success: function() {
+                    location.reload();
+                }
             });
         });
-    });
+    }
 
     if ( !predictionMode ) {
         // populate KO stages

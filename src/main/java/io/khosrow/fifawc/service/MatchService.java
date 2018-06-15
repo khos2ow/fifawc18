@@ -128,15 +128,19 @@ public class MatchService {
         Match entity = match.get();
 
         // team goals validation
-        if (payload.getTeam1Goals() == null || payload.getTeam1Goals() < 0) {
-            return MatchDTO.of(Match.NULL);
-        } else if (payload.getTeam2Goals() == null || payload.getTeam2Goals() < 0) {
-            return MatchDTO.of(Match.NULL);
-        } else if (payload.getTeam1PenaltyGoals() == null || payload.getTeam1PenaltyGoals() < 0) {
-            return MatchDTO.of(Match.NULL);
-        } else if (payload.getTeam2PenaltyGoals() == null || payload.getTeam2PenaltyGoals() < 0) {
-            return MatchDTO.of(Match.NULL);
-        }
+        //TODO
+//        if (payload.getTeam1Goals() == null || payload.getTeam1Goals() < 0) {
+//            return MatchDTO.of(Match.NULL);
+//        } else if (payload.getTeam2Goals() == null || payload.getTeam2Goals() < 0) {
+//            return MatchDTO.of(Match.NULL);
+//        }
+//        if (!entity.getStage().equals(Stage.GROUPS)) {
+//            if (payload.getTeam1PenaltyGoals() == null || payload.getTeam1PenaltyGoals() < 0) {
+//                return MatchDTO.of(Match.NULL);
+//            } else if (payload.getTeam2PenaltyGoals() == null || payload.getTeam2PenaltyGoals() < 0) {
+//                return MatchDTO.of(Match.NULL);
+//            }
+//        }
 
         entity.setTeam1Goals(payload.getTeam1Goals());
         entity.setTeam1PenaltyGoals(payload.getTeam1PenaltyGoals());
@@ -146,6 +150,7 @@ public class MatchService {
         // save match result
         repository.save(entity);
 
+        // post match upgrade (standings, knock-out, ...)
         // update group standings
         if (entity.getStage().equals(Stage.GROUPS)) {
             Pair<Team, Team> proceedNextRound = standingService.updateStanding(entity);

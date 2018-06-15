@@ -12,15 +12,28 @@ import io.khosrow.fifawc.common.dto.StandingDTO;
 import io.khosrow.fifawc.domain.Match;
 import io.khosrow.fifawc.domain.Standing;
 import io.khosrow.fifawc.domain.Team;
+import io.khosrow.fifawc.domain.User;
+import io.khosrow.fifawc.repo.PredictionStandingRepository;
 import io.khosrow.fifawc.repo.StandingRepository;
 
 @Service
 public class StandingService {
     private final StandingRepository repository;
+    private final PredictionStandingRepository predictionStandingRepository;
 
     @Autowired
-    public StandingService(StandingRepository repository) {
+    public StandingService(StandingRepository repository, PredictionStandingRepository predictionStandingRepository) {
         this.repository = repository;
+        this.predictionStandingRepository = predictionStandingRepository;
+    }
+
+    /**
+     * Get list of all the standings
+     * 
+     * @return list of Standing
+     */
+    public List<Standing> getAllStandings() {
+        return repository.findAll();
     }
 
     /**
@@ -30,12 +43,20 @@ public class StandingService {
      * 
      * @return list of StandingDTO
      */
-    public List<StandingDTO> getStandingByGroupId(Integer id) {
-        return repository.findByGroupId(id)
-                .stream()
-                .sorted()
-                .map(StandingDTO::of)
-                .collect(Collectors.toList());
+    public List<StandingDTO> getStandingByGroupId(Integer id, User user) {
+        if (user == null) {
+            return repository.findByGroupId(id)
+                    .stream()
+                    .sorted()
+                    .map(StandingDTO::of)
+                    .collect(Collectors.toList());
+        } else {
+            return predictionStandingRepository.findByGroupIdAndUserId(id, user.getId())
+                    .stream()
+                    .sorted()
+                    .map(StandingDTO::of)
+                    .collect(Collectors.toList());
+        }
     }
 
     /**
