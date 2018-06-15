@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import io.khosrow.fifawc.common.dto.MatchDTO;
 import io.khosrow.fifawc.common.dto.PredictionDTO;
 import io.khosrow.fifawc.common.util.Stage;
+import io.khosrow.fifawc.domain.Group;
 import io.khosrow.fifawc.domain.Prediction;
 import io.khosrow.fifawc.domain.PredictionStanding;
 import io.khosrow.fifawc.domain.Team;
@@ -48,6 +49,24 @@ public class PredictionService {
                 .map(PredictionDTO::of)
                 .collect(Collectors.toList());
     }
+    
+        /**
+         * Get list of matches in provided group
+         * 
+         * @param group instance look up match for
+         * 
+         * @return list of MatchDTO of current Group
+         */
+        public List<MatchDTO> getMatchesByGroup(Optional<Group> group, User user) {
+            if (!group.isPresent()) {
+                return Collections.emptyList();
+            }
+    
+            return repository.findByGroupIdAndUserId(group.get().getId(), user.getId())
+                    .stream()
+                    .map(MatchDTO::of)
+                    .collect(Collectors.toList());
+        }
 
     /**
      * Get list of matches in provided stage

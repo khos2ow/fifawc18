@@ -1,6 +1,8 @@
 package io.khosrow.fifawc.api;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.khosrow.fifawc.common.dto.GroupDTO;
 import io.khosrow.fifawc.common.dto.MatchDTO;
 import io.khosrow.fifawc.common.dto.PredictionDTO;
+import io.khosrow.fifawc.domain.Group;
 import io.khosrow.fifawc.domain.User;
 import io.khosrow.fifawc.service.GroupService;
 import io.khosrow.fifawc.service.PredictionService;
@@ -48,7 +51,8 @@ public class PredictApi {
 
     @GetMapping("/groups/{id}/matches")
     public List<MatchDTO> getGroupMatchesByUuid(@PathVariable(value = "id") String uuid, @AuthenticationPrincipal User user) {
-        return groupService.getGroupMatchesByUuid(uuid);
+        Optional<Group> group = groupService.getGroupByUuid(uuid);
+        return service.getMatchesByGroup(group, user);
     }
 
     @GetMapping(value = "/matches", params = {"stage"})
