@@ -33,6 +33,13 @@ publish:
   only:
     - master
 
+deploy:
+  stage: deploy
+  script:
+    - "curl -X POST -F token=${PIPELINE_TRIGGER_TOKEN} -F ref=master https://gitlab.com/api/v4/projects/${PIPELINE_TRIGGER_PROJECT}/trigger/pipeline"
+  only:
+    - master
+
 .auto_config: &auto_config |
 
   function test_verify() {
