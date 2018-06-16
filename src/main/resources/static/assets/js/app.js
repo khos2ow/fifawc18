@@ -130,6 +130,8 @@
         $.get('/api/' + predictionApiPrefix + 'groups/' + value.uuid + '/matches', function (data) {
             // group standing table
             $.each(data, function (k, v) {
+                var disabled = new Date() > new Date(v.matchDate) ? ' disabled="disabled"' : '';
+
                 $('.tab-pane#' + value.uuid + ' .group-matches .table tbody').append($([
                     '<tr>',
                         '<td class="match-time text-left">',
@@ -146,9 +148,9 @@
                         '<td class="match-result text-center">',
                             predictionMode ?
                             [
-                                '<input class="team-goal-input team-goal-input-team1-goals prediction-match-' + v.number + '" data-match-team="team1-goals" data-match-number="' + v.number + '" type="text" />',
+                                '<input class="team-goal-input team-goal-input-team1-goals prediction-match-' + v.number + '" data-match-team="team1-goals" data-match-number="' + v.number + '" type="text"' + disabled + ' />',
                                 '-',
-                                '<input class="team-goal-input team-goal-input-team2-goals prediction-match-' + v.number + '" data-match-team="team2-goals" data-match-number="' + v.number + '" type="text" />'
+                                '<input class="team-goal-input team-goal-input-team2-goals prediction-match-' + v.number + '" data-match-team="team2-goals" data-match-number="' + v.number + '" type="text"' + disabled + ' />'
                             ].join('') :
                             v.team1Goals == null || v.team2Goals == null ? '-' : v.team1Goals + '-' + v.team2Goals,
                         '</td>',
@@ -208,7 +210,7 @@
                             }
                         }
 
-                        var disabled = v.team1 == null || v.team2 == null ? ' disabled="disabled"' : '';
+                        var disabled = v.team1 == null || v.team2 == null ? ' disabled="disabled"' : new Date() > new Date(v.matchDate) ? ' disabled="disabled"' : '';
 
                         $('.' + value.cls + ' .matches').append($([
                             '<div>',

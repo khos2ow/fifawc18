@@ -1,5 +1,7 @@
 package io.khosrow.fifawc.service;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -104,7 +106,16 @@ public class PredictionService {
             if (entity.isPresent()) {
                 Prediction prediction = entity.get();
 
+                // something's not right
                 if (prediction.getTeam1() == null || prediction.getTeam2() == null) {
+                    return;
+                }
+
+                // cannot add/edit matches that are already past
+                ZonedDateTime NOW = ZonedDateTime.now(ZoneId.of("America/New_York"));
+                ZonedDateTime matchDate = prediction.getMatchDate().toInstant().atZone(ZoneId.of("America/New_York"));
+
+                if (NOW.compareTo(matchDate) > 0) {
                     return;
                 }
 

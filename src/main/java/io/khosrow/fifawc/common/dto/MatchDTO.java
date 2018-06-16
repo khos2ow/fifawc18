@@ -1,5 +1,7 @@
 package io.khosrow.fifawc.common.dto;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.Optional;
 
@@ -29,6 +31,12 @@ public class MatchDTO {
 
     public String getStage() {
         return stage.getTitle();
+    }
+
+    public ZonedDateTime getMatchDate() {
+        return matchDate.toInstant()
+                .atZone(ZoneId.of("America/New_York"))
+                .withZoneSameInstant(ZoneId.of("UTC"));
     }
 
     public static MatchDTO of(Match match) {
