@@ -36,7 +36,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public PrincipalExtractor principalExtractor(UserRepository userRepository) {
         return map -> {
-            String principalId = (String)map.get("id");
+            String principalId = (String) map.get("id");
             User user = userRepository.findByPrincipalId(principalId);
 
             if (user == null) {
@@ -44,9 +44,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
                 user.setPrincipalId(principalId);
                 user.setCreated(LocalDateTime.now());
-                user.setEmail((String)map.get("email"));
-                user.setFullName((String)map.get("name"));
-                user.setPhoto((String)map.get("picture"));
+                user.setEmail((String) map.get("email"));
+                user.setFullName((String) map.get("name"));
+                user.setPhoto((String) map.get("picture"));
                 user.setLoginType(UserLoginType.GOOGLE);
                 user.setLastLogin(LocalDateTime.now());
                 user.setPoints(0);

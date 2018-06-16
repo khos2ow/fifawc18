@@ -4,8 +4,9 @@ import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 
-import io.khosrow.fifawc.domain.Prediction;
 import lombok.Data;
+
+import io.khosrow.fifawc.domain.Prediction;
 
 @Data
 public class PredictionDTO {

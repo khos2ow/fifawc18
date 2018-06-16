@@ -2,8 +2,9 @@ package io.khosrow.fifawc.common.dto;
 
 import org.modelmapper.ModelMapper;
 
-import io.khosrow.fifawc.domain.User;
 import lombok.Data;
+
+import io.khosrow.fifawc.domain.User;
 
 @Data
 public class UserDTO {

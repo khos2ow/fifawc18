@@ -23,7 +23,7 @@ public class UserService {
 
     /**
      * Get sorted list of Leadernoard
-     * 
+     *
      * @return list of leaderbord
      */
     public List<UserDTO> getLeaderboard() {

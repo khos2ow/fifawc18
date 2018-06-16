@@ -4,8 +4,9 @@ import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 
-import io.khosrow.fifawc.domain.Country;
 import lombok.Data;
+
+import io.khosrow.fifawc.domain.Country;
 
 @Data
 public class CountryDTO {

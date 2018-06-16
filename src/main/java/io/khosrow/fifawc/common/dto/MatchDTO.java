@@ -5,10 +5,11 @@ import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 
+import lombok.Data;
+
 import io.khosrow.fifawc.common.util.Stage;
 import io.khosrow.fifawc.domain.Match;
 import io.khosrow.fifawc.domain.Prediction;
-import lombok.Data;
 
 @Data
 public class MatchDTO {

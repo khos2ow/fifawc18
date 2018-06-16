@@ -1,4 +1,4 @@
-(function($) {
+(function ($) {
     "use strict";
 
     // Offset for Main Navigation
@@ -13,7 +13,7 @@
     var matchesMode = window.location.href.indexOf('/matches') > -1 ? true : false;
     var leaderboardMode = window.location.href.indexOf('/leaderboard') > -1 ? true : false;
 
-    $.get('/user', function(data) {
+    $.get('/user', function (data) {
         $('.navbar .btn-login').hide();
         $('.navbar .btn-predict').show();
         $('.navbar .btn-user').show();
@@ -25,29 +25,29 @@
         ].join('')));
         $('.navbar .btn-logout').show();
 
-        if ( !matchesMode ) {
+        if (!matchesMode) {
             populateContent();
         }
-    }).fail(function() {
+    }).fail(function () {
         $('.navbar .btn-login').show();
         $('.navbar .btn-predict').hide();
         $('.navbar .btn-user').hide();
         $('.navbar .btn-user').empty();
         $('.navbar .btn-logout').hide();
 
-        if ( !matchesMode ) {
+        if (!matchesMode) {
             populateContent();
         }
     });
 
-    $('.btn-logout').click(function(e) {
+    $('.btn-logout').click(function (e) {
         e.preventDefault();
-        $.post('/logout', function(data) {
+        $.post('/logout', function (data) {
             window.location.href = "/";
         });
     });
 
-    var populateTab = function(key, value) {
+    var populateTab = function (key, value) {
         var active = key == 0 ? ' active' : '';
 
         // group tabs
@@ -58,7 +58,7 @@
         ].join('')));
     };
 
-    var populateTabContent = function(key, value) {
+    var populateTabContent = function (key, value) {
         var active = key == 0 ? ' in active' : '';
 
         // group tab's content
@@ -103,15 +103,15 @@
         ].join('')));
     };
 
-    var populateStandings = function(key, value) {
+    var populateStandings = function (key, value) {
         // group standing table
-        $.each(value.standing, function(k, v) {
+        $.each(value.standing, function (k, v) {
             $('.tab-pane#' + value.uuid + ' .group-standing .table tbody').append($([
                 '<tr>',
-                    '<th class="text-center" scope="row">' + (k+1) + '</th>',
-                    '<td>', 
-                        '<img src="' + v.team.country.flag + '" style="width: 20px; margin-right: 5px;" />', 
-                        '<span>' + v.team.country.name + '</span>', 
+                    '<th class="text-center" scope="row">' + (k + 1) + '</th>',
+                    '<td>',
+                        '<img src="' + v.team.country.flag + '" style="width: 20px; margin-right: 5px;" />',
+                        '<span>' + v.team.country.name + '</span>',
                     '</td>',
                     '<td class="text-center">' + v.games + '</td>',
                     '<td class="text-center">' + v.wins + '</td>',
@@ -126,10 +126,10 @@
         });
     };
 
-    var populateGroupMatches = function(key, value) {
-        $.get('/api/' + predictionApiPrefix + 'groups/' + value.uuid + '/matches', function(data) {
+    var populateGroupMatches = function (key, value) {
+        $.get('/api/' + predictionApiPrefix + 'groups/' + value.uuid + '/matches', function (data) {
             // group standing table
-            $.each(data, function(k, v) {
+            $.each(data, function (k, v) {
                 $('.tab-pane#' + value.uuid + ' .group-matches .table tbody').append($([
                     '<tr>',
                         '<td class="match-time text-left">',
@@ -137,14 +137,14 @@
                             ' - ',
                             new Date(v.matchDate).toLocaleTimeString().replace(/:00 /, ' '),
                         '</td>',
-                        '<td class="match-home text-right">', 
-                            v.team1Goals != null && v.team2Goals != null && v.team1Goals > v.team2Goals ? '<b>' : '', 
-                            '<span>' + v.team1.country.name + '</span>', 
-                            '<img src="' + v.team1.country.flag + '" style="width: 20px; margin-left: 5px;" />', 
-                            v.team1Goals != null && v.team2Goals != null && v.team1Goals > v.team2Goals ? '</b>' : '', 
+                        '<td class="match-home text-right">',
+                            v.team1Goals != null && v.team2Goals != null && v.team1Goals > v.team2Goals ? '<b>' : '',
+                            '<span>' + v.team1.country.name + '</span>',
+                            '<img src="' + v.team1.country.flag + '" style="width: 20px; margin-left: 5px;" />',
+                            v.team1Goals != null && v.team2Goals != null && v.team1Goals > v.team2Goals ? '</b>' : '',
                         '</td>',
                         '<td class="match-result text-center">',
-                            predictionMode ? 
+                            predictionMode ?
                             [
                                 '<input class="team-goal-input team-goal-input-team1-goals prediction-match-' + v.number + '" data-match-team="team1-goals" data-match-number="' + v.number + '" type="text" />',
                                 '-',
@@ -152,11 +152,11 @@
                             ].join('') :
                             v.team1Goals == null || v.team2Goals == null ? '-' : v.team1Goals + '-' + v.team2Goals,
                         '</td>',
-                        '<td class="match-away text-left">', 
-                            v.team1Goals != null && v.team2Goals != null && v.team2Goals > v.team1Goals ? '<b>' : '', 
-                            '<img src="' + v.team2.country.flag + '" style="width: 20px; margin-right: 5px;" />', 
-                            '<span>' + v.team2.country.name + '</span>', 
-                            v.team1Goals != null && v.team2Goals != null && v.team2Goals > v.team1Goals ? '</b>' : '', 
+                        '<td class="match-away text-left">',
+                            v.team1Goals != null && v.team2Goals != null && v.team2Goals > v.team1Goals ? '<b>' : '',
+                            '<img src="' + v.team2.country.flag + '" style="width: 20px; margin-right: 5px;" />',
+                            '<span>' + v.team2.country.name + '</span>',
+                            v.team1Goals != null && v.team2Goals != null && v.team2Goals > v.team1Goals ? '</b>' : '',
                         '</td>',
                     '</tr>'
                 ].join('')));
@@ -164,157 +164,157 @@
         });
     };
 
-    var populateContent = function() {
-	    // populate groups
-	    $.get('/api/' + predictionApiPrefix + 'groups', function(data) {
-	        $.each(data, function(key, value) {
-	            populateTab(key, value);
-	            populateTabContent(key, value);
-	            populateStandings(key, value);
-	            populateGroupMatches(key, value);
-	        });
-	    }).then(function() {
-	        var stages = [{
-	            name: 'ROUND_SIXTEEN', 
-	            cls: 'ko-sixteen'
-	        }, {
-	            name: 'QUARTER_FINALS', 
-	            cls: 'ko-quarters'
-	        }, {
-	            name: 'SEMI_FINALS', 
-	            cls: 'ko-semis'
-	        }, {
-	            name: 'PLAYOFF', 
-	            cls: 'ko-playoff'
-	        }, {
-	            name: 'FINAL', 
-	            cls: 'ko-final'
-	        }];
+    var populateContent = function () {
+        // populate groups
+        $.get('/api/' + predictionApiPrefix + 'groups', function (data) {
+            $.each(data, function (key, value) {
+                populateTab(key, value);
+                populateTabContent(key, value);
+                populateStandings(key, value);
+                populateGroupMatches(key, value);
+            });
+        }).then(function () {
+            var stages = [{
+                name: 'ROUND_SIXTEEN',
+                cls: 'ko-sixteen'
+            }, {
+                name: 'QUARTER_FINALS',
+                cls: 'ko-quarters'
+            }, {
+                name: 'SEMI_FINALS',
+                cls: 'ko-semis'
+            }, {
+                name: 'PLAYOFF',
+                cls: 'ko-playoff'
+            }, {
+                name: 'FINAL',
+                cls: 'ko-final'
+            }];
 
-	        $.each(stages, function(key, value) {
-	            // populate KO stages
-	            $.get('/api/' + predictionApiPrefix + 'matches?stage=' + value.name, function(data) {
-	                $.each(data, function(k, v) {
-	                    var team1Winner = false;
-	                    var team2Winner = false;
+            $.each(stages, function (key, value) {
+                // populate KO stages
+                $.get('/api/' + predictionApiPrefix + 'matches?stage=' + value.name, function (data) {
+                    $.each(data, function (k, v) {
+                        var team1Winner = false;
+                        var team2Winner = false;
 
-	                    if ( v.team1Goals != null && v.team2Goals != null ) {
-	                        if ( v.team1Goals == v.team2Goals ) {
-	                            team1Winner = v.team1PenaltyGoals > v.team2PenaltyGoals;
-	                            team2Winner = v.team2PenaltyGoals > v.team1PenaltyGoals;
-	                        } else {
-	                            team1Winner = v.team1Goals > v.team2Goals;
-	                            team2Winner = v.team2Goals > v.team1Goals;
-	                        }
-	                    }
+                        if (v.team1Goals != null && v.team2Goals != null) {
+                            if (v.team1Goals == v.team2Goals) {
+                                team1Winner = v.team1PenaltyGoals > v.team2PenaltyGoals;
+                                team2Winner = v.team2PenaltyGoals > v.team1PenaltyGoals;
+                            } else {
+                                team1Winner = v.team1Goals > v.team2Goals;
+                                team2Winner = v.team2Goals > v.team1Goals;
+                            }
+                        }
 
-	                    var disabled = v.team1 == null || v.team2 == null ? ' disabled="disabled"' : '';
+                        var disabled = v.team1 == null || v.team2 == null ? ' disabled="disabled"' : '';
 
-	                    $('.' + value.cls + ' .matches').append($([
-	                        '<div>',
-	                            '<div>',
-	                                new Date(v.matchDate).toDateString(),
-	                                ' - ',
-	                                new Date(v.matchDate).toLocaleTimeString().replace(/:00 /, ' '),
-	                            '</div>',
-	                            '<div class="ko-match">',
-	                                '<div class="match-number">' + v.number + '</div>', 
-	                                '<div class="match-content">',
-	                                    '<div class="match-content-team">',
-	                                        v.team1 != null ?
-	                                            [
-	                                                team1Winner ? '<b>' : '', 
-	                                                '<img src="' + v.team1.country.flag + '" style="width: 20px; margin-right: 5px;" />',
-	                                                '<span>' + v.team1.country.name + '</span>',
-	                                                team1Winner ? '</b>' : ''
-	                                            ].join('')
-	                                        : v.team1Indicator,
-	                                    '</div>',
-	                                    '<div class="match-content-team">',
-	                                        v.team2 != null ?
-	                                            [
-	                                                team2Winner ? '<b>' : '', 
-	                                                '<img src="' + v.team2.country.flag + '" style="width: 20px; margin-right: 5px;" />',
-	                                                '<span>' + v.team2.country.name + '</span>',
-	                                                team2Winner ? '</b>' : '', 
-	                                            ].join('')
-	                                        : v.team2Indicator,
-	                                    '</div>',
-	                                '</div>', 
-	                                '<div class="match-result">',
-	                                    '<div class="match-result-score">',
-	                                        predictionMode ? 
-	                                        [
-	                                            '<input class="team-goal-input team-goal-input-team1-goals prediction-match-' + v.number + '" data-match-team="team1-goals" data-match-number="' + v.number + '" type="text"' + disabled + ' />'
-	                                        ].join('') :
-	                                        v.team1Goals == null ? '&nbsp;' :
-	                                        [
-	                                            team1Winner ? '<b>' : '',
-	                                            v.team1Goals, 
-	                                            team1Winner ? '</b>' : ''
-	                                        ].join(''), 
-	                                    '</div>',
-	                                    '<div class="match-result-score">',
-	                                        predictionMode ? 
-	                                        [
-	                                            '<input class="team-goal-input team-goal-input-team2-goals prediction-match-' + v.number + '" data-match-team="team2-goals" data-match-number="' + v.number + '" type="text"' + disabled + ' />'
-	                                        ].join('') :
-	                                        v.team2Goals == null ? '&nbsp;' :
-	                                        [
-	                                            team2Winner ? '<b>' : '',
-	                                            v.team2Goals, 
-	                                            team2Winner ? '</b>' : ''
-	                                        ].join(''), 
-	                                    '</div>',
-	                                '</div>', 
-	                                '<div class="match-result">',
-	                                    '<div class="match-result-score">',
-	                                        predictionMode ? 
-	                                        [
-	                                            '<input class="team-goal-input team-goal-input-team1-penalty-goals prediction-match-' + v.number + '" data-match-team="team1-penalty-goals" data-match-number="' + v.number + '" type="text"' + disabled + ' />'
-	                                        ].join('') :
-	                                        v.team1PenaltyGoals == null ? '&nbsp;' :
-	                                        [
-	                                            team1Winner ? '<b>' : '',
-	                                            v.team1PenaltyGoals, 
-	                                            team1Winner ? '</b>' : ''
-	                                        ].join(''), 
-	                                    '</div>',
-	                                    '<div class="match-result-score">',
-	                                        predictionMode ? 
-	                                        [
-	                                            '<input class="team-goal-input team-goal-input-team2-penalty-goals prediction-match-' + v.number + '" data-match-team="team2-penalty-goals" data-match-number="' + v.number + '" type="text"' + disabled + ' />'
-	                                        ].join('') :
-	                                        v.team2PenaltyGoals == null ? '&nbsp;' :
-	                                        [
-	                                            team2Winner ? '<b>' : '',
-	                                            v.team2PenaltyGoals, 
-	                                            team2Winner ? '</b>' : ''
-	                                        ].join(''), 
-	                                    '</div>',
-	                                '</div>', 
-	                            '</div>',
-	                        '</div>'
-	                    ].join('')));
-	                });
-	            });
-	        });
-	    }).then(function() {
-	        if ( predictionMode ) {
-	            $.get('/api/predictions', function(data) {
-	                $.each(data, function(key, value) {
-	                    $('.team-goal-input.team-goal-input-team1-goals.prediction-match-' + value.number).val(value.team1Goals != null ? value.team1Goals : '');
-	                    $('.team-goal-input.team-goal-input-team2-goals.prediction-match-' + value.number).val(value.team2Goals != null ? value.team2Goals : '');
-	                    $('.team-goal-input.team-goal-input-team1-penalty-goals.prediction-match-' + value.number).val(value.team1PenaltyGoals != null ? value.team1PenaltyGoals : '');
-	                    $('.team-goal-input.team-goal-input-team2-penalty-goals.prediction-match-' + value.number).val(value.team2PenaltyGoals != null ? value.team2PenaltyGoals : '');
-	                });
-	            });
-	        }
-	    });
-	};
+                        $('.' + value.cls + ' .matches').append($([
+                            '<div>',
+                                '<div>',
+                                    new Date(v.matchDate).toDateString(),
+                                    ' - ',
+                                    new Date(v.matchDate).toLocaleTimeString().replace(/:00 /, ' '),
+                                '</div>',
+                                '<div class="ko-match">',
+                                    '<div class="match-number">' + v.number + '</div>',
+                                    '<div class="match-content">',
+                                        '<div class="match-content-team">',
+                                            v.team1 != null ?
+                                            [
+                                                team1Winner ? '<b>' : '',
+                                                '<img src="' + v.team1.country.flag + '" style="width: 20px; margin-right: 5px;" />',
+                                                '<span>' + v.team1.country.name + '</span>',
+                                                team1Winner ? '</b>' : ''
+                                            ].join('')
+                                            : v.team1Indicator,
+                                        '</div>',
+                                        '<div class="match-content-team">',
+                                            v.team2 != null ?
+                                            [
+                                                team2Winner ? '<b>' : '',
+                                                '<img src="' + v.team2.country.flag + '" style="width: 20px; margin-right: 5px;" />',
+                                                '<span>' + v.team2.country.name + '</span>',
+                                                team2Winner ? '</b>' : '',
+                                            ].join('')
+                                            : v.team2Indicator,
+                                        '</div>',
+                                    '</div>',
+                                    '<div class="match-result">',
+                                        '<div class="match-result-score">',
+                                            predictionMode ?
+                                            [
+                                                '<input class="team-goal-input team-goal-input-team1-goals prediction-match-' + v.number + '" data-match-team="team1-goals" data-match-number="' + v.number + '" type="text"' + disabled + ' />'
+                                            ].join('') :
+                                            v.team1Goals == null ? '&nbsp;' :
+                                            [
+                                                team1Winner ? '<b>' : '',
+                                                v.team1Goals,
+                                                team1Winner ? '</b>' : ''
+                                            ].join(''),
+                                        '</div>',
+                                        '<div class="match-result-score">',
+                                            predictionMode ?
+                                            [
+                                                '<input class="team-goal-input team-goal-input-team2-goals prediction-match-' + v.number + '" data-match-team="team2-goals" data-match-number="' + v.number + '" type="text"' + disabled + ' />'
+                                            ].join('') :
+                                            v.team2Goals == null ? '&nbsp;' :
+                                            [
+                                                team2Winner ? '<b>' : '',
+                                                v.team2Goals,
+                                                team2Winner ? '</b>' : ''
+                                            ].join(''),
+                                        '</div>',
+                                    '</div>',
+                                    '<div class="match-result">',
+                                        '<div class="match-result-score">',
+                                            predictionMode ?
+                                            [
+                                                '<input class="team-goal-input team-goal-input-team1-penalty-goals prediction-match-' + v.number + '" data-match-team="team1-penalty-goals" data-match-number="' + v.number + '" type="text"' + disabled + ' />'
+                                            ].join('') :
+                                            v.team1PenaltyGoals == null ? '&nbsp;' :
+                                            [
+                                                team1Winner ? '<b>' : '',
+                                                v.team1PenaltyGoals,
+                                                team1Winner ? '</b>' : ''
+                                            ].join(''),
+                                        '</div>',
+                                        '<div class="match-result-score">',
+                                            predictionMode ?
+                                            [
+                                                '<input class="team-goal-input team-goal-input-team2-penalty-goals prediction-match-' + v.number + '" data-match-team="team2-penalty-goals" data-match-number="' + v.number + '" type="text"' + disabled + ' />'
+                                            ].join('') :
+                                            v.team2PenaltyGoals == null ? '&nbsp;' :
+                                            [
+                                                team2Winner ? '<b>' : '',
+                                                v.team2PenaltyGoals,
+                                                team2Winner ? '</b>' : ''
+                                            ].join(''),
+                                        '</div>',
+                                    '</div>',
+                                '</div>',
+                            '</div>'
+                        ].join('')));
+                    });
+                });
+            });
+        }).then(function () {
+            if (predictionMode) {
+                $.get('/api/predictions', function (data) {
+                    $.each(data, function (key, value) {
+                        $('.team-goal-input.team-goal-input-team1-goals.prediction-match-' + value.number).val(value.team1Goals != null ? value.team1Goals : '');
+                        $('.team-goal-input.team-goal-input-team2-goals.prediction-match-' + value.number).val(value.team2Goals != null ? value.team2Goals : '');
+                        $('.team-goal-input.team-goal-input-team1-penalty-goals.prediction-match-' + value.number).val(value.team1PenaltyGoals != null ? value.team1PenaltyGoals : '');
+                        $('.team-goal-input.team-goal-input-team2-penalty-goals.prediction-match-' + value.number).val(value.team2PenaltyGoals != null ? value.team2PenaltyGoals : '');
+                    });
+                });
+            }
+        });
+    };
 
-    if ( predictionMode ) {
-        $('.save-match-predictions').click(function(el) {
+    if (predictionMode) {
+        $('.save-match-predictions').click(function (el) {
             el.preventDefault();
             el.stopPropagation();
 
@@ -323,20 +323,20 @@
 
             var predictions = [];
 
-            $('.team-goal-input').each(function(k, e) {
+            $('.team-goal-input').each(function (k, e) {
                 var $e = $(e);
                 var type = $e.data('match-team');
                 var number = $e.data('match-number');
                 var value = $e.val();
 
-                if ( typeof $e.attr('disabled') === 'undefined' ) {
-	                predictions.push({
-	                    "number": number, 
-	                    "team1Goals": type === 'team1-goals' ? value : null,
-	                    "team1PenaltyGoals": type === 'team1-penalty-goals' ? value : null,
-	                    "team2Goals": type === 'team2-goals' ? value : null,
-	                    "team2PenaltyGoals": type === 'team2-penalty-goals' ? value : null
-	                });
+                if (typeof $e.attr('disabled') === 'undefined') {
+                    predictions.push({
+                        "number": number,
+                        "team1Goals": type === 'team1-goals' ? value : null,
+                        "team1PenaltyGoals": type === 'team1-penalty-goals' ? value : null,
+                        "team2Goals": type === 'team2-goals' ? value : null,
+                        "team2PenaltyGoals": type === 'team2-penalty-goals' ? value : null
+                    });
                 }
             });
 
@@ -346,20 +346,20 @@
                 dataType: 'json',
                 data: JSON.stringify(predictions),
                 contentType: 'application/json',
-                success: function() {
+                success: function () {
                     location.reload();
                 }
             });
         });
     }
 
-    if ( leaderboardMode ) {
+    if (leaderboardMode) {
         // populate KO stages
-        $.get('/api/leaderboard', function(data) {
-            $.each(data, function(key, value) {
-            	$('.leaderboards tbody').append($([
+        $.get('/api/leaderboard', function (data) {
+            $.each(data, function (key, value) {
+                $('.leaderboards tbody').append($([
                     '<tr>',
-                        '<th class="text-center" scope="row">' + (key+1) + '</th>',
+                        '<th class="text-center" scope="row">' + (key + 1) + '</th>',
                         '<td>',
                             '<img class="user-avatar" src="' + value.photo + '" title="' + value.fullName + '" />',
                             value.fullName,
@@ -371,15 +371,15 @@
         });
     }
 
-    if ( matchesMode ) {
+    if (matchesMode) {
         // populate KO stages
-        $.get('/api/matches?sort=date', function(data) {
-            $.each(data, function(key, value) {
+        $.get('/api/matches?sort=date', function (data) {
+            $.each(data, function (key, value) {
                 var team1Winner = false;
                 var team2Winner = false;
 
-                if ( value.team1Goals != null && value.team2Goals != null ) {
-                    if ( value.stage !== 'Group Phase' && value.team1Goals == value.team2Goals ) {
+                if (value.team1Goals != null && value.team2Goals != null) {
+                    if (value.stage !== 'Group Phase' && value.team1Goals == value.team2Goals) {
                         team1Winner = value.team1PenaltyGoals > value.team2PenaltyGoals;
                         team2Winner = value.team2PenaltyGoals > value.team1PenaltyGoals;
                     } else {
@@ -390,7 +390,7 @@
 
                 $('.matches tbody').append($([
                     '<tr>',
-                        '<th class="text-center" scope="row">' + (key+1) + '</th>',
+                        '<th class="text-center" scope="row">' + (key + 1) + '</th>',
                         '<td class="match-time text-left">',
                             new Date(value.matchDate).toDateString(),
                             ' - ',
@@ -399,38 +399,32 @@
                         '<td>',
                             value.stage,
                         '</td>',
-                        '<td class="match-home text-right">', 
-                            value.team1 == null ?
-                            [
+                        '<td class="match-home text-right">',
+                            value.team1 == null ? [
                                 value.team1Indicator
-                            ] :
-                            [
-                                team1Winner ? '<b>' : '', 
-                                '<span>' + value.team1.country.name + '</span>', 
-                                '<img src="' + value.team1.country.flag + '" style="width: 20px; margin-left: 5px;" />', 
+                            ] : [
+                                team1Winner ? '<b>' : '',
+                                '<span>' + value.team1.country.name + '</span>',
+                                '<img src="' + value.team1.country.flag + '" style="width: 20px; margin-left: 5px;" />',
                                 team1Winner ? '</b>' : ''
                             ].join(''),
                         '</td>',
                         '<td class="match-result text-center">',
                             value.team1Goals == null || value.team2Goals == null ? '-' : value.team1Goals + '-' + value.team2Goals,
-                            value.stage === 'Group Phase' ? '' :
-                            [
-                                ( value.team1Goals != null && value.team2Goals != null ) && ( value.team1Goals == value.team2Goals ) ?
-                                [
+                            value.stage === 'Group Phase' ? '' : [
+                                (value.team1Goals != null && value.team2Goals != null) && (value.team1Goals == value.team2Goals) ? [
                                     '<br />',
                                     value.team1PenaltyGoals == null || value.team2PenaltyGoals == null ? '-' : value.team1PenaltyGoals + '-' + value.team2PenaltyGoals
                                 ].join('') : ''
                             ],
                         '</td>',
-                        '<td class="match-away text-left">', 
-                            value.team2 == null ?
-                            [
+                        '<td class="match-away text-left">',
+                            value.team2 == null ? [
                                 value.team2Indicator
-                            ] :
-                            [
-                                team2Winner ? '<b>' : '', 
-                                '<img src="' + value.team2.country.flag + '" style="width: 20px; margin-right: 5px;" />', 
-                                '<span>' + value.team2.country.name + '</span>', 
+                            ] : [
+                                team2Winner ? '<b>' : '',
+                                '<img src="' + value.team2.country.flag + '" style="width: 20px; margin-right: 5px;" />',
+                                '<span>' + value.team2.country.name + '</span>',
                                 team2Winner ? '</b>' : ''
                             ].join(''),
                         '</td>',

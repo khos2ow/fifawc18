@@ -1,6 +1,5 @@
 package io.khosrow.fifawc.api;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,7 +54,7 @@ public class PredictApi {
         return service.getMatchesByGroup(group, user);
     }
 
-    @GetMapping(value = "/matches", params = {"stage"})
+    @GetMapping(value = "/matches", params = { "stage" })
     public List<MatchDTO> getMatchesByStage(@RequestParam(name = "stage", required = true) String stage, @AuthenticationPrincipal User user) {
         User entity = userService.getUserByPrincipalId(user.getPrincipalId());
 

@@ -24,9 +24,9 @@ public class TeamService {
 
     /**
      * Find a Team by its UUID
-     * 
+     *
      * @param uuid to look for
-     * 
+     *
      * @return TeamDTO instance
      */
     public Optional<Team> getTeamById(String uuid) {
@@ -35,9 +35,9 @@ public class TeamService {
 
     /**
      * Find a Team by its UUID
-     * 
+     *
      * @param uuid to look for
-     * 
+     *
      * @return TeamDTO instance
      */
     public TeamDTO getTeamDtoById(String uuid) {
@@ -46,9 +46,9 @@ public class TeamService {
 
     /**
      * Find all teams
-     * 
-     * @param sort 
-     * 
+     *
+     * @param sort
+     *
      * @return list of TeamDTO
      */
     public List<TeamDTO> getAllTeams(final String sort) {

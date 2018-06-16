@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.google.common.base.Strings;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
+
+import com.google.common.base.Strings;
 
 import io.khosrow.fifawc.common.dto.MatchDTO;
 import io.khosrow.fifawc.common.util.Stage;
@@ -33,7 +33,7 @@ public class MatchService {
 
     /**
      * Get list of all the matches
-     * 
+     *
      * @return list of Match
      */
     public List<Match> getAllMaches() {
@@ -42,9 +42,9 @@ public class MatchService {
 
     /**
      * Get list of matches in provided stage
-     * 
+     *
      * @param name of the stage to look up match for
-     * 
+     *
      * @return list of MatchDTO of current Stage
      */
     public List<MatchDTO> getMatchesByStage(String name) {
@@ -62,9 +62,9 @@ public class MatchService {
 
     /**
      * Get list of matches in provided group
-     * 
+     *
      * @param group instance look up match for
-     * 
+     *
      * @return list of MatchDTO of current Group
      */
     public List<MatchDTO> getMatchesByGroup(Optional<Group> group) {
@@ -80,9 +80,9 @@ public class MatchService {
 
     /**
      * Get list of matches in provided group
-     * 
+     *
      * @param group instance look up match for
-     * 
+     *
      * @return list of MatchDTO of current Group
      */
     public List<MatchDTO> getMatchesSorted(String sort) {
@@ -103,10 +103,10 @@ public class MatchService {
 
     /**
      * Save a Match result by its UUID
-     * 
-     * @param uuid of the match
+     *
+     * @param uuid    of the match
      * @param payload of the result
-     * 
+     *
      * @return saved MatchDTO instance
      */
     public MatchDTO saveMatchResult(String uuid, MatchDTO payload) {
@@ -117,11 +117,11 @@ public class MatchService {
 
     /**
      * Save a Match result between 'home' and 'away' team by their UUIDs
-     * 
+     *
      * @param homeUuid to look up Team
      * @param awayUuid to look up Team
-     * @param payload of the result
-     * 
+     * @param payload  of the result
+     *
      * @return saved MatchDTO instance
      */
     public MatchDTO saveMatchResult(String homeUuid, String awayUuid, MatchDTO payload) {
@@ -139,10 +139,10 @@ public class MatchService {
 
     /**
      * Save Match result
-     * 
-     * @param match optional instance
+     *
+     * @param match   optional instance
      * @param payload of the result
-     * 
+     *
      * @return saved MatchDTO instance or Match.NULL if something goes wrong
      */
     private MatchDTO saveMatch(Optional<Match> match, MatchDTO payload) {
@@ -153,19 +153,21 @@ public class MatchService {
         Match entity = match.get();
 
         // team goals validation
-        //TODO
-//        if (payload.getTeam1Goals() == null || payload.getTeam1Goals() < 0) {
-//            return MatchDTO.of(Match.NULL);
-//        } else if (payload.getTeam2Goals() == null || payload.getTeam2Goals() < 0) {
-//            return MatchDTO.of(Match.NULL);
-//        }
-//        if (!entity.getStage().equals(Stage.GROUPS)) {
-//            if (payload.getTeam1PenaltyGoals() == null || payload.getTeam1PenaltyGoals() < 0) {
-//                return MatchDTO.of(Match.NULL);
-//            } else if (payload.getTeam2PenaltyGoals() == null || payload.getTeam2PenaltyGoals() < 0) {
-//                return MatchDTO.of(Match.NULL);
-//            }
-//        }
+        // TODO
+        // if (payload.getTeam1Goals() == null || payload.getTeam1Goals() < 0) {
+        // return MatchDTO.of(Match.NULL);
+        // } else if (payload.getTeam2Goals() == null || payload.getTeam2Goals() < 0) {
+        // return MatchDTO.of(Match.NULL);
+        // }
+        // if (!entity.getStage().equals(Stage.GROUPS)) {
+        // if (payload.getTeam1PenaltyGoals() == null || payload.getTeam1PenaltyGoals()
+        // < 0) {
+        // return MatchDTO.of(Match.NULL);
+        // } else if (payload.getTeam2PenaltyGoals() == null ||
+        // payload.getTeam2PenaltyGoals() < 0) {
+        // return MatchDTO.of(Match.NULL);
+        // }
+        // }
 
         entity.setTeam1Goals(payload.getTeam1Goals());
         entity.setTeam1PenaltyGoals(payload.getTeam1PenaltyGoals());

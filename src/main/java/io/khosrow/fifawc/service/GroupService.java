@@ -25,23 +25,23 @@ public class GroupService {
         this.standingService = standingService;
         this.matchService = matchService;
     }
-    
+
     /**
      * Find a Group by its UUID
-     * 
+     *
      * @param uuid to look for
-     * 
+     *
      * @return GroupDTO instance
      */
     public Optional<Group> getGroupByUuid(String uuid) {
         return repository.findByUuid(uuid);
     }
-    
+
     /**
      * Find a Group by its name
-     * 
+     *
      * @param name to look for
-     * 
+     *
      * @return GroupDTO instance
      */
     public Optional<Group> getGroupByName(String name) {
@@ -50,9 +50,9 @@ public class GroupService {
 
     /**
      * Find a Group with Standing by its UUID
-     * 
+     *
      * @param uuid to look for
-     * 
+     *
      * @return GroupDTO instance
      */
     public GroupDTO getGroupWithStandingByUuid(String uuid) {
@@ -61,9 +61,9 @@ public class GroupService {
 
     /**
      * Find a Group with Standing by its name
-     * 
+     *
      * @param name to look for
-     * 
+     *
      * @return GroupDTO instance
      */
     public GroupDTO getGroupWithStandingByName(String name) {
@@ -72,7 +72,7 @@ public class GroupService {
 
     /**
      * Find all groups details
-     * 
+     *
      * @return list of GroupDTO
      */
     public List<GroupDTO> getAllGroups() {
@@ -81,12 +81,12 @@ public class GroupService {
                 .map(g -> getGroupStanding(Optional.of(g), null))
                 .collect(Collectors.toList());
     }
-    
+
     /**
      * Find all groups details for User
-     * 
+     *
      * @param user to filter for
-     * 
+     *
      * @return list of GroupDTO
      */
     public List<GroupDTO> getAllGroups(User user) {
@@ -98,9 +98,9 @@ public class GroupService {
 
     /**
      * Get list of matches in provided group
-     * 
+     *
      * @param uuid of Group to look up match for
-     * 
+     *
      * @return list of MatchDTO of current Group
      */
     public List<MatchDTO> getGroupMatchesByUuid(String uuid) {
@@ -109,9 +109,9 @@ public class GroupService {
 
     /**
      * Get list of matches in provided group
-     * 
+     *
      * @param name of Group to look up match for
-     * 
+     *
      * @return list of MatchDTO of current Group
      */
     public List<MatchDTO> getGroupMatchesByName(String name) {
@@ -120,9 +120,9 @@ public class GroupService {
 
     /**
      * Get group standings
-     * 
+     *
      * @param group instance
-     * 
+     *
      * @return GroupDTO instance with full standing list
      */
     private GroupDTO getGroupStanding(Optional<Group> group, User user) {

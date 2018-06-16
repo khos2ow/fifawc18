@@ -22,12 +22,12 @@ public class CountryApi {
         this.service = service;
     }
 
-    @GetMapping(params = {"sort"})
+    @GetMapping(params = { "sort" })
     public List<CountryDTO> getAllCountries(@RequestParam(name = "sort", required = false) String sort) {
         return service.getAllCountries(sort);
     }
 
-    @GetMapping(params = {"name"})
+    @GetMapping(params = { "name" })
     public CountryDTO getCountryByName(@RequestParam(name = "name", required = true) String name) {
         return service.getCountryByName(name);
     }

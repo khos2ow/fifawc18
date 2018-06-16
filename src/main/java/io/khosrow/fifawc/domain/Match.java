@@ -15,10 +15,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import io.khosrow.fifawc.common.util.IMatch;
-import io.khosrow.fifawc.common.util.Stage;
 import lombok.Data;
 import lombok.experimental.NonFinal;
+
+import io.khosrow.fifawc.common.util.IMatch;
+import io.khosrow.fifawc.common.util.Stage;
 
 @Entity
 @Table(name = "matches")
@@ -66,7 +67,7 @@ public class Match implements IMatch {
 
     @Column(name = "team2_goals")
     private Integer team2Goals;
-    
+
     @Column(name = "team2_penalty_goals")
     private Integer team2PenaltyGoals;
 

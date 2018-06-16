@@ -27,17 +27,17 @@ public class MatchApi {
         this.groupService = groupService;
     }
 
-    @GetMapping(params = {"group"})
+    @GetMapping(params = { "group" })
     public List<MatchDTO> getMatchesByGroup(@RequestParam(name = "group", required = true) String name) {
         return groupService.getGroupMatchesByName(name);
     }
 
-    @GetMapping(params = {"stage"})
+    @GetMapping(params = { "stage" })
     public List<MatchDTO> getMatchesByStage(@RequestParam(name = "stage", required = true) String stage) {
         return service.getMatchesByStage(stage);
     }
 
-    @GetMapping(params = {"sort"})
+    @GetMapping(params = { "sort" })
     public List<MatchDTO> getMatchesSorted(@RequestParam(name = "sort", required = true) String sort) {
         return service.getMatchesSorted(sort);
     }
@@ -49,6 +49,7 @@ public class MatchApi {
 
     @PostMapping("/home/{home}/away/{away}")
     public MatchDTO saveMatchResult(@PathVariable(value = "home") String homeUuid, @PathVariable(value = "away") String awayUuid, @RequestBody MatchDTO payload) {
+
         return service.saveMatchResult(homeUuid, awayUuid, payload);
     }
 }

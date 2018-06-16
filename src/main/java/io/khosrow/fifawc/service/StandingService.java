@@ -29,7 +29,7 @@ public class StandingService {
 
     /**
      * Get list of all the standings
-     * 
+     *
      * @return list of Standing
      */
     public List<Standing> getAllStandings() {
@@ -38,9 +38,9 @@ public class StandingService {
 
     /**
      * Get list of Standing teams in provided Group
-     * 
+     *
      * @param id of group to look up standing for
-     * 
+     *
      * @return list of StandingDTO
      */
     public List<StandingDTO> getStandingByGroupId(Integer id, User user) {
@@ -61,9 +61,9 @@ public class StandingService {
 
     /**
      * Update Group Standing based the Match result
-     * 
+     *
      * @param match instance
-     * 
+     *
      * @return true if group stage was finished after this match, false if not
      */
     public Pair<Team, Team> updateStanding(Match match) {
@@ -75,21 +75,21 @@ public class StandingService {
 
         // check if this match is the latest one in particular group staging
         List<Standing> standing = repository.findByGroupId(match.getGroup().getId())
-                                            .stream()
-                                            .sorted()
-                                            .collect(Collectors.toList());
+                                    .stream()
+                                    .sorted()
+                                    .collect(Collectors.toList());
 
         Standing notCompletedMatch = standing.stream()
-                                            .filter(s -> s.getGames() < 3)
-                                            .findAny()
-                                            .orElse(null);
+                                        .filter(s -> s.getGames() < 3)
+                                        .findAny()
+                                        .orElse(null);
 
         return notCompletedMatch != null ? Pair.of(Team.NULL, Team.NULL) : Pair.of(standing.get(0).getTeam(), standing.get(1).getTeam());
     }
 
     /**
      * Update particular Team in Group Standing based on the Match result
-     * 
+     *
      * @param standing
      * @param homeGoals
      * @param awayGoals

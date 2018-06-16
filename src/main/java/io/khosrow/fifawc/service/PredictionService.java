@@ -38,9 +38,9 @@ public class PredictionService {
 
     /**
      * Get Prediction of logged in User
-     * 
+     *
      * @param user to look up prediction for
-     * 
+     *
      * @return list of Prediction
      */
     public List<PredictionDTO> getPredictionsOfUser(User user) {
@@ -49,31 +49,31 @@ public class PredictionService {
                 .map(PredictionDTO::of)
                 .collect(Collectors.toList());
     }
-    
-        /**
-         * Get list of matches in provided group
-         * 
-         * @param group instance look up match for
-         * 
-         * @return list of MatchDTO of current Group
-         */
-        public List<MatchDTO> getMatchesByGroup(Optional<Group> group, User user) {
-            if (!group.isPresent()) {
-                return Collections.emptyList();
-            }
-    
-            return repository.findByGroupIdAndUserId(group.get().getId(), user.getId())
-                    .stream()
-                    .map(MatchDTO::of)
-                    .collect(Collectors.toList());
+
+    /**
+     * Get list of matches in provided group
+     *
+     * @param group instance look up match for
+     *
+     * @return list of MatchDTO of current Group
+     */
+    public List<MatchDTO> getMatchesByGroup(Optional<Group> group, User user) {
+        if (!group.isPresent()) {
+            return Collections.emptyList();
         }
+
+        return repository.findByGroupIdAndUserId(group.get().getId(), user.getId())
+                .stream()
+                .map(MatchDTO::of)
+                .collect(Collectors.toList());
+    }
 
     /**
      * Get list of matches in provided stage
-     * 
+     *
      * @param name of the stage to look up match for
      * @param user to filter for
-     * 
+     *
      * @return list of MatchDTO of current Stage
      */
     public List<MatchDTO> getMatchesByStage(String name, User user) {
@@ -91,10 +91,10 @@ public class PredictionService {
 
     /**
      * Save Prediction of logged in User
-     * 
+     *
      * @param payload of the prediction
-     * @param user who are making the prediction
-     * 
+     * @param user    who are making the prediction
+     *
      * @return true if successful
      */
     public boolean savePredictionsOfUser(List<PredictionDTO> payload, User user) {
@@ -132,7 +132,7 @@ public class PredictionService {
 
         // update group standing and knock-out stages
         List<Prediction> findByUser = repository.findByUser(user);
-        
+
         findByUser.forEach(prediction -> {
             // update group standings
             if (prediction.getStage().equals(Stage.GROUPS)) {
@@ -233,7 +233,7 @@ public class PredictionService {
 
     /**
      * Generate placeholder list of Predictions for new User
-     *  
+     *
      * @param user to generate prediction placeholder for
      */
     public void generatePredictionForNewUser(User user) {
@@ -271,7 +271,7 @@ public class PredictionService {
 
     /**
      * Generate placeholder list of Predictions Standing for new User
-     *  
+     *
      * @param user to generate prediction standing placeholder for
      */
     public void generatePredictionStandingForNewUser(User user) {
@@ -307,29 +307,30 @@ public class PredictionService {
 
     /**
      * Reset Predictions of User to re-populate it
-     * 
+     *
      * @param user instance to reset their prediction
      */
     private void resetPredictionStandings(User user) {
-        predictionStandingRepository.findByUser(user).forEach(standing -> {
-            standing.setGames(0);
-            standing.setWins(0);
-            standing.setDraws(0);
-            standing.setLoses(0);
-            standing.setGoalsFor(0);
-            standing.setGoalsAgainst(0);
-            standing.setGoalsDiff(0);
-            standing.setPoints(0);
+        predictionStandingRepository.findByUser(user)
+            .forEach(standing -> {
+                standing.setGames(0);
+                standing.setWins(0);
+                standing.setDraws(0);
+                standing.setLoses(0);
+                standing.setGoalsFor(0);
+                standing.setGoalsAgainst(0);
+                standing.setGoalsDiff(0);
+                standing.setPoints(0);
 
-            predictionStandingRepository.save(standing);
-        });
+                predictionStandingRepository.save(standing);
+            });
     }
 
     /**
      * Update Group Standing based the Match result
-     * 
+     *
      * @param prediction instance
-     * 
+     *
      * @return true if group stage was finished after this match, false if not
      */
     private Pair<Team, Team> updateStanding(Prediction prediction, User user) {
@@ -341,21 +342,21 @@ public class PredictionService {
 
         // check if this match is the latest one in particular group staging
         List<PredictionStanding> standing = predictionStandingRepository.findByGroupIdAndUserId(prediction.getGroup().getId(), user.getId())
-                                            .stream()
-                                            .sorted()
-                                            .collect(Collectors.toList());
+                                                .stream()
+                                                .sorted()
+                                                .collect(Collectors.toList());
 
         PredictionStanding notCompletedMatch = standing.stream()
-                                            .filter(s -> s.getGames() < 3)
-                                            .findAny()
-                                            .orElse(null);
+                                                .filter(s -> s.getGames() < 3)
+                                                .findAny()
+                                                .orElse(null);
 
         return notCompletedMatch != null ? Pair.of(Team.NULL, Team.NULL) : Pair.of(standing.get(0).getTeam(), standing.get(1).getTeam());
     }
 
     /**
      * Update particular Team in Group Standing based on the Match result
-     * 
+     *
      * @param standing
      * @param homeGoals
      * @param awayGoals

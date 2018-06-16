@@ -4,8 +4,9 @@ import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 
-import io.khosrow.fifawc.domain.Team;
 import lombok.Data;
+
+import io.khosrow.fifawc.domain.Team;
 
 @Data
 public class TeamDTO {

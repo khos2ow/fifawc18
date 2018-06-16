@@ -15,10 +15,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import io.khosrow.fifawc.common.util.IMatch;
-import io.khosrow.fifawc.common.util.Stage;
 import lombok.Data;
 import lombok.experimental.NonFinal;
+
+import io.khosrow.fifawc.common.util.IMatch;
+import io.khosrow.fifawc.common.util.Stage;
 
 @Entity
 @Table(name = "predictions")

@@ -28,7 +28,7 @@ public class GroupApi {
         return service.getAllGroups();
     }
 
-    @GetMapping(params = {"name"})
+    @GetMapping(params = { "name" })
     public GroupDTO getGroupByName(@RequestParam(name = "name", required = true) String name) {
         return service.getGroupWithStandingByName(name);
     }

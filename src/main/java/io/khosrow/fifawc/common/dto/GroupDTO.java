@@ -6,8 +6,9 @@ import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 
-import io.khosrow.fifawc.domain.Group;
 import lombok.Data;
+
+import io.khosrow.fifawc.domain.Group;
 
 @Data
 public class GroupDTO {

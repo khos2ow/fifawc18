@@ -443,7 +443,7 @@ header .header-content .header-content-inner p {
 .group-matches .match-away {
 	width: -webkit-calc(50% - 162.5px);
 	width: -moz-calc(50% - 162.5px);
-	width: calc(50% - 162.5px);	
+	width: calc(50% - 162.5px);
 }
 .group-matches .match-result {
 	width: 75px;
@@ -482,15 +482,15 @@ header .header-content .header-content-inner p {
   vertical-align: middle;
   border-left: 1px solid #ccc;
 }
-.ko-match .match-content-team, 
+.ko-match .match-content-team,
 .ko-match .match-result-score {
   height: 50%;
   padding: 5px 0;
   vertical-align: middle;
 }
-.ko-match .match-content-team:first-child, 
+.ko-match .match-content-team:first-child,
 .ko-match .match-result-score:first-child {
-  border-bottom: 1px solid #ccc;  
+  border-bottom: 1px solid #ccc;
 }
 .ko-match .match-content-team {
   padding-left: 10px;
@@ -521,8 +521,8 @@ header .header-content .header-content-inner p {
 }
 
 
-.btn-predict, 
-.btn-user, 
+.btn-predict,
+.btn-user,
 .btn-logout {
   display: none;
 }
@@ -533,7 +533,7 @@ header .header-content .header-content-inner p {
   margin-right: 15px;
 }
 
-.leaderboards tbody tr th, 
+.leaderboards tbody tr th,
 .leaderboards tbody tr td {
   vertical-align: middle;
 }

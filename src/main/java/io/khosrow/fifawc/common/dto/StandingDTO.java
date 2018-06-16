@@ -4,9 +4,10 @@ import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 
+import lombok.Data;
+
 import io.khosrow.fifawc.domain.PredictionStanding;
 import io.khosrow.fifawc.domain.Standing;
-import lombok.Data;
 
 @Data
 public class StandingDTO {

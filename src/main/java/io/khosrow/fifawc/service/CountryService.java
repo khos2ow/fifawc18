@@ -23,9 +23,9 @@ public class CountryService {
 
     /**
      * Find a Country by its UUID
-     * 
+     *
      * @param uuid to look for
-     * 
+     *
      * @return CountryDTO instance
      */
     public CountryDTO getCountryByUuid(String uuid) {
@@ -34,9 +34,9 @@ public class CountryService {
 
     /**
      * Find a Country by its name
-     * 
+     *
      * @param name to look for
-     * 
+     *
      * @return CountryDTO instance
      */
     public CountryDTO getCountryByName(String name) {
@@ -45,9 +45,9 @@ public class CountryService {
 
     /**
      * Find all countries
-     * 
-     * @param sort 
-     * 
+     *
+     * @param sort
+     *
      * @return list of CountryDTO
      */
     public List<CountryDTO> getAllCountries(final String sort) {
