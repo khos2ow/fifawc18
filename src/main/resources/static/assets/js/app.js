@@ -130,7 +130,7 @@
         $.get('/api/' + predictionApiPrefix + 'groups/' + value.uuid + '/matches', function (data) {
             // group standing table
             $.each(data, function (k, v) {
-                var disabled = ''; //new Date() > new Date(v.matchDate) ? ' disabled="disabled"' : '';
+                var disabled = new Date() > new Date(v.matchDate) ? ' disabled="disabled"' : '';
 
                 $('.tab-pane#' + value.uuid + ' .group-matches .table tbody').append($([
                     '<tr>',
@@ -210,7 +210,7 @@
                             }
                         }
 
-                        var disabled = v.team1 == null || v.team2 == null ? ' disabled="disabled"' : ''; //new Date() > new Date(v.matchDate) ? ' disabled="disabled"' : '';
+                        var disabled = v.team1 == null || v.team2 == null ? ' disabled="disabled"' : new Date() > new Date(v.matchDate) ? ' disabled="disabled"' : '';
 
                         $('.' + value.cls + ' .matches').append($([
                             '<div>',
