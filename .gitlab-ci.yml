@@ -6,15 +6,15 @@ stages:
   - deploy
 
 variables:
-  MAVEN_OPTS: '-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=INFO 
-               -Dorg.slf4j.simpleLogger.showDateTime=true 
+  MAVEN_OPTS: '-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=INFO
+               -Dorg.slf4j.simpleLogger.showDateTime=true
                -Djava.awt.headless=true
                -Dmaven.repo.local=/root/.m2/repository'
 
 test:
   stage: test
   script:
-    - test_verify
+    - make clean test
   artifacts:
     name: "test_code_quality_report_${CI_BUILD_REF_SLUG}"
     paths:
@@ -29,7 +29,7 @@ publish:
   stage: publish
   script:
     - setup_docker
-    - publish_docker
+    - make build-push
   only:
     - master
 
@@ -42,29 +42,12 @@ deploy:
 
 .auto_config: &auto_config |
 
-  function test_verify() {
-    ./mvnw clean verify --batch-mode --show-version
-  }
-
   function setup_docker() {
     if ! docker info &>/dev/null; then
       if [ -z "$DOCKER_HOST" ]; then
         export DOCKER_HOST='tcp://localhost:2375'
       fi
     fi
-  }
-
-  function publish_docker() {
-    ./mvnw clean -q &> /dev/null
-    local pom_version=`./mvnw org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version | grep -v '\[' | grep -v '\/' | grep -v 'Warning' | tr "[:upper:]" "[:lower:]" | tr -d "\r"`
-    ./mvnw verify --activate-profiles production \
-                  --batch-mode \
-                  -DskipTests=true \
-                  -DpushImage \
-                  -DpushTags \
-                  -Ddocker.image.version="${pom_version}" \
-                  --show-version \
-                  --settings settings.xml
   }
 
 before_script:
