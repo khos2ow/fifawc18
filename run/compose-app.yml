@@ -26,6 +26,8 @@ services:
       - DATABASE_USER=root
       - DATABASE_PASSWORD=root
       - DATABASE_NAME=fifawc18
+      - OAUTH_CLIENT_ID=xxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com
+      - OAUTH_CLIENT_SECRET=yyyyyyyyyyyyyyyyy
     depends_on:
       mysql:
         condition: service_healthy
