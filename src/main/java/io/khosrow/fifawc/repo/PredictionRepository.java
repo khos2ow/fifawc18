@@ -15,6 +15,8 @@ import io.khosrow.fifawc.domain.User;
 public interface PredictionRepository extends JpaRepository<Prediction, Integer> {
     List<Prediction> findByUser(User user);
 
+    List<Prediction> findByNumber(String number);
+
     List<Prediction> findByGroupIdAndUserId(Integer groupId, Integer userId);
 
     List<Prediction> findByStageAndUserId(Stage stage, Integer userId);

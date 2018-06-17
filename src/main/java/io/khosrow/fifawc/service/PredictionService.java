@@ -92,6 +92,19 @@ public class PredictionService {
     }
 
     /**
+     * Get all Prediction of all Users for particular Match
+     *
+     * @param number of the match
+     *
+     * @return list of Prediction
+     */
+    public List<Prediction> getAllPredictionsByNumber(String number) {
+        return repository.findByNumber(number)
+                .stream()
+                .collect(Collectors.toList());
+    }
+
+    /**
      * Save Prediction of logged in User
      *
      * @param payload of the prediction

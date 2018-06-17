@@ -49,7 +49,6 @@ public class MatchApi {
 
     @PostMapping("/home/{home}/away/{away}")
     public MatchDTO saveMatchResult(@PathVariable(value = "home") String homeUuid, @PathVariable(value = "away") String awayUuid, @RequestBody MatchDTO payload) {
-
         return service.saveMatchResult(homeUuid, awayUuid, payload);
     }
 }
