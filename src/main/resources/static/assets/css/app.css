@@ -82,7 +82,8 @@ section {
 }
 section#group-stage,
 section#leaderboard,
-section#matches {
+section#matches,
+section#teams {
   margin-top: 80px;
 }
 aside {
