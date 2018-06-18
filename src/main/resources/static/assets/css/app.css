@@ -414,21 +414,18 @@ header .header-content .header-content-inner p {
     width: 20%;
     float: left;
 }
-
 @media (min-width: 768px) {
     .col-sm-5ths {
         width: 20%;
         float: left;
     }
 }
-
 @media (min-width: 992px) {
     .col-md-5ths {
         width: 20%;
         float: left;
     }
 }
-
 @media (min-width: 1200px) {
     .col-lg-5ths {
         width: 20%;
@@ -436,22 +433,19 @@ header .header-content .header-content-inner p {
     }
 }
 
-.group-matches .match-time {
-	width: 250px;
+.group-standing {
+    overflow-x: auto;
 }
-.group-matches .match-home,
-.group-matches .match-away {
-	width: -webkit-calc(50% - 162.5px);
-	width: -moz-calc(50% - 162.5px);
-	width: calc(50% - 162.5px);
+.group-standing .standing-team {
+    min-width: 150px;
 }
-.group-matches .match-result {
-	width: 75px;
-}
-
 .group-standing .narrow-column {
 	width: 50px;
 	text-align: center;
+}
+.group-matches .match-result {
+    padding-left: 0;
+    padding-right: 0;
 }
 
 .ko-match {
@@ -497,29 +491,63 @@ header .header-content .header-content-inner p {
   padding-right: 10px;
 }
 
-.ko-quarters .matches > div {
-  margin-top: 133px;
-}
-.ko-quarters .matches > div:first-child {
-  margin-top: 73px;
+@media (min-width: 1200px) {
+    .ko-quarters .matches > div {
+        margin-top: 133px;
+    }
+    .ko-quarters .matches > div:first-child {
+        margin-top: 73px;
+    }
+
+    .ko-semis .matches > div {
+        margin-top: 350px;
+    }
+    .ko-semis .matches > div:first-child {
+        margin-top: 188px;
+    }
+
+    .ko-playoff .matches > div,
+    .ko-final .matches > div {
+        margin-top: 350px;
+    }
+    .ko-playoff .matches > div:first-child,
+    .ko-final .matches > div:first-child {
+        margin-top: 395px;
+    }
 }
 
-.ko-semis .matches > div {
-  margin-top: 350px;
-}
-.ko-semis .matches > div:first-child {
-  margin-top: 188px;
+.matches .match-number {
+    font-weight: bold;
+    width: 5%;
 }
 
-.ko-playoff .matches > div,
-.ko-final .matches > div {
-  margin-top: 350px;
+.match-time {
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
-.ko-playoff .matches > div:first-child,
-.ko-final .matches > div:first-child {
-  margin-top: 395px;
+@media (min-width: 1200px) {
+    .match-time {
+        text-align: left;
+    }
 }
 
+.match-number,
+.match-home,
+.match-result,
+.match-away {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.match-home .flag {
+    width: 20px;
+    margin-left: 5px;
+}
+.match-away .flag {
+    width: 20px;
+    margin-right: 5px;
+}
 
 .btn-predict,
 .btn-user,
@@ -541,4 +569,8 @@ header .header-content .header-content-inner p {
 .team-goal-input {
   width: 25px;
   text-align: center;
+}
+
+.round-header {
+    background: #e9e9e9;
 }

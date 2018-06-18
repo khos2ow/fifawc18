@@ -67,24 +67,21 @@
                 '<br>',
                 '<div class="row">',
                     '<div class="col-xs-12 col-md-6 group-matches">',
-                        '<table class="table">',
+                        '<table class="table table-striped table-hover">',
                             '<thead>',
-                                '<tr>',
-                                    '<th class="match-time">&nbsp;</th>',
-                                    '<th class="match-home">&nbsp;</th>',
-                                    '<th class="match-result">&nbsp;</th>',
-                                    '<th class="match-away">&nbsp;</th>',
+                                '<tr class="hidden-xs hidden-sm hidden-mdx">',
+                                    '<th>&nbsp;</th>',
                                 '</tr>',
                             '</thead>',
                             '<tbody></tbody>',
                         '</table>',
                     '</div>',
                     '<div class="col-xs-12 col-md-6 group-standing">',
-                        '<table class="table">',
+                        '<table class="table table-hover standing-table">',
                             '<thead>',
                                 '<tr>',
                                     '<th class="narrow-column">#</th>',
-                                    '<th>Team</th>',
+                                    '<th class="standing-team">Team</th>',
                                     '<th class="narrow-column" title="Games">G</th>',
                                     '<th class="narrow-column" title="Wins">W</th>',
                                     '<th class="narrow-column" title="Draws">D</th>',
@@ -134,31 +131,33 @@
 
                 $('.tab-pane#' + value.uuid + ' .group-matches .table tbody').append($([
                     '<tr>',
-                        '<td class="match-time text-left">',
-                            new Date(v.matchDate).toDateString(),
-                            ' - ',
-                            new Date(v.matchDate).toLocaleTimeString().replace(/:00 /, ' '),
-                        '</td>',
-                        '<td class="match-home text-right">',
-                            v.team1Goals != null && v.team2Goals != null && v.team1Goals > v.team2Goals ? '<b>' : '',
-                            '<span>' + v.team1.country.name + '</span>',
-                            '<img src="' + v.team1.country.flag + '" style="width: 20px; margin-left: 5px;" />',
-                            v.team1Goals != null && v.team2Goals != null && v.team1Goals > v.team2Goals ? '</b>' : '',
-                        '</td>',
-                        '<td class="match-result text-center">',
-                            predictionMode ?
-                            [
-                                '<input class="team-goal-input team-goal-input-team1-goals prediction-match-' + v.number + '" data-match-team="team1-goals" data-match-number="' + v.number + '" type="text"' + disabled + ' />',
-                                '-',
-                                '<input class="team-goal-input team-goal-input-team2-goals prediction-match-' + v.number + '" data-match-team="team2-goals" data-match-number="' + v.number + '" type="text"' + disabled + ' />'
-                            ].join('') :
-                            v.team1Goals == null || v.team2Goals == null ? '-' : v.team1Goals + '-' + v.team2Goals,
-                        '</td>',
-                        '<td class="match-away text-left">',
-                            v.team1Goals != null && v.team2Goals != null && v.team2Goals > v.team1Goals ? '<b>' : '',
-                            '<img src="' + v.team2.country.flag + '" style="width: 20px; margin-right: 5px;" />',
-                            '<span>' + v.team2.country.name + '</span>',
-                            v.team1Goals != null && v.team2Goals != null && v.team2Goals > v.team1Goals ? '</b>' : '',
+                        '<td>',
+                            '<div class="col-xs-12 col-lg-3 match-time">',
+                                new Date(v.matchDate).toDateString(),
+                                ' - ',
+                                new Date(v.matchDate).toLocaleTimeString().replace(/:00 /, ' '),
+                            '</div>',
+                            '<div class="col-xs-5 col-lg-4 match-home text-right">',
+                                v.team1Goals != null && v.team2Goals != null && v.team1Goals > v.team2Goals ? '<b>' : '',
+                                '<span>' + v.team1.country.name + '</span>',
+                                '<img src="' + v.team1.country.flag + '" class="flag" />',
+                                v.team1Goals != null && v.team2Goals != null && v.team1Goals > v.team2Goals ? '</b>' : '',
+                            '</div>',
+                            '<div class="col-xs-2 col-lg-1 match-result text-center">',
+                                predictionMode ?
+                                [
+                                    '<input class="team-goal-input team-goal-input-team1-goals prediction-match-' + v.number + '" data-match-team="team1-goals" data-match-number="' + v.number + '" type="text"' + disabled + ' />',
+                                    '-',
+                                    '<input class="team-goal-input team-goal-input-team2-goals prediction-match-' + v.number + '" data-match-team="team2-goals" data-match-number="' + v.number + '" type="text"' + disabled + ' />'
+                                ].join('') :
+                                v.team1Goals == null || v.team2Goals == null ? '-' : v.team1Goals + '-' + v.team2Goals,
+                            '</div>',
+                            '<div class="col-xs-5 col-lg-4 match-away text-left">',
+                                v.team1Goals != null && v.team2Goals != null && v.team2Goals > v.team1Goals ? '<b>' : '',
+                                '<img src="' + v.team2.country.flag + '" class="flag" />',
+                                '<span>' + v.team2.country.name + '</span>',
+                                v.team1Goals != null && v.team2Goals != null && v.team2Goals > v.team1Goals ? '</b>' : '',
+                            '</div>',
                         '</td>',
                     '</tr>'
                 ].join('')));
@@ -376,6 +375,7 @@
     if (matchesMode) {
         // populate KO stages
         $.get('/api/matches?sort=date', function (data) {
+            var stage = null;
             $.each(data, function (key, value) {
                 var team1Winner = false;
                 var team2Winner = false;
@@ -390,45 +390,57 @@
                     }
                 }
 
+                var showHeader = false;
+                if (stage == null || value.stage !== stage) {
+                    stage = value.stage;
+                    showHeader = true;
+                }
+
                 $('.matches tbody').append($([
+                    showHeader ? [
+                        '<tr>',
+                            '<th class="round-header" scope="colgroup">',
+                                value.stage,
+                            '</th>',
+                        '</tr>'
+                    ].join('') : '',
                     '<tr>',
-                        '<th class="text-center" scope="row">' + (key + 1) + '</th>',
-                        '<td class="match-time text-left">',
-                            new Date(value.matchDate).toDateString(),
-                            ' - ',
-                            new Date(value.matchDate).toLocaleTimeString().replace(/:00 /, ' '),
-                        '</td>',
                         '<td>',
-                            value.stage,
-                        '</td>',
-                        '<td class="match-home text-right">',
-                            value.team1 == null ? [
-                                value.team1Indicator
-                            ] : [
-                                team1Winner ? '<b>' : '',
-                                '<span>' + value.team1.country.name + '</span>',
-                                '<img src="' + value.team1.country.flag + '" style="width: 20px; margin-left: 5px;" />',
-                                team1Winner ? '</b>' : ''
-                            ].join(''),
-                        '</td>',
-                        '<td class="match-result text-center">',
-                            value.team1Goals == null || value.team2Goals == null ? '-' : value.team1Goals + '-' + value.team2Goals,
-                            value.stage === 'Group Phase' ? '' : [
-                                (value.team1Goals != null && value.team2Goals != null) && (value.team1Goals == value.team2Goals) ? [
-                                    '<br />',
-                                    value.team1PenaltyGoals == null || value.team2PenaltyGoals == null ? '-' : value.team1PenaltyGoals + '-' + value.team2PenaltyGoals
-                                ].join('') : ''
-                            ],
-                        '</td>',
-                        '<td class="match-away text-left">',
-                            value.team2 == null ? [
-                                value.team2Indicator
-                            ] : [
-                                team2Winner ? '<b>' : '',
-                                '<img src="' + value.team2.country.flag + '" style="width: 20px; margin-right: 5px;" />',
-                                '<span>' + value.team2.country.name + '</span>',
-                                team2Winner ? '</b>' : ''
-                            ].join(''),
+                            '<div class="hidden-xs hidden-sm hidden-md col-lg-1 match-number text-center">' + (key + 1) + '</div>',
+                            '<div class="col-xs-12 col-lg-5ths match-time">',
+                                new Date(value.matchDate).toDateString(),
+                                ' - ',
+                                new Date(value.matchDate).toLocaleTimeString().replace(/:00 /, ' '),
+                            '</div>',
+                            '<div class="col-xs-5 col-lg-4 match-home text-right">',
+                                value.team1 == null ? [
+                                    value.team1Indicator
+                                ] : [
+                                    team1Winner ? '<b>' : '',
+                                    '<span>' + value.team1.country.name + '</span>',
+                                    '<img src="' + value.team1.country.flag + '" class="flag" />',
+                                    team1Winner ? '</b>' : ''
+                                ].join(''),
+                            '</div>',
+                            '<div class="col-xs-2 col-lg-1 match-result text-center">',
+                                value.team1Goals == null || value.team2Goals == null ? '-' : value.team1Goals + '-' + value.team2Goals,
+                                value.stage === 'Group Phase' ? '' : [
+                                    (value.team1Goals != null && value.team2Goals != null) && (value.team1Goals == value.team2Goals) ? [
+                                        '<br />',
+                                        value.team1PenaltyGoals == null || value.team2PenaltyGoals == null ? '-' : value.team1PenaltyGoals + '-' + value.team2PenaltyGoals
+                                    ].join('') : ''
+                                ],
+                            '</div>',
+                            '<div class="col-xs-5 col-lg-4 match-away text-left">',
+                                value.team2 == null ? [
+                                    value.team2Indicator
+                                ] : [
+                                    team2Winner ? '<b>' : '',
+                                    '<img src="' + value.team2.country.flag + '" class="flag" />',
+                                    '<span>' + value.team2.country.name + '</span>',
+                                    team2Winner ? '</b>' : ''
+                                ].join(''),
+                            '</div>',
                         '</td>',
                     '</tr>'
                 ].join('')));
