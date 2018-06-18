@@ -8,10 +8,8 @@
         }
     });
 
-    var predictionMode = window.location.href.indexOf('/predict') > -1 ? true : false;
-    var predictionApiPrefix = predictionMode ? 'predictions/' : '';
-    var matchesMode = window.location.href.indexOf('/matches') > -1 ? true : false;
-    var leaderboardMode = window.location.href.indexOf('/leaderboard') > -1 ? true : false;
+    var path = window.location.pathname;
+    var predictionApiPrefix = path === '/predict' ? 'predictions/' : '';
 
     $.get('/user', function (data) {
         $('.navbar .btn-login').hide();
@@ -25,7 +23,7 @@
         ].join('')));
         $('.navbar .btn-logout').show();
 
-        if (!matchesMode) {
+        if (path === '/' || path === '/predict') {
             populateContent();
         }
     }).fail(function () {
@@ -35,7 +33,7 @@
         $('.navbar .btn-user').empty();
         $('.navbar .btn-logout').hide();
 
-        if (!matchesMode) {
+        if (path === '/' || path === '/predict') {
             populateContent();
         }
     });
@@ -144,7 +142,7 @@
                                 v.team1Goals != null && v.team2Goals != null && v.team1Goals > v.team2Goals ? '</b>' : '',
                             '</div>',
                             '<div class="col-xs-2 col-lg-1 match-result text-center">',
-                                predictionMode ?
+                                path === '/predict' ?
                                 [
                                     '<input class="team-goal-input team-goal-input-team1-goals prediction-match-' + v.number + '" data-match-team="team1-goals" data-match-number="' + v.number + '" type="text"' + disabled + ' />',
                                     '-',
@@ -244,7 +242,7 @@
                                     '</div>',
                                     '<div class="match-result">',
                                         '<div class="match-result-score">',
-                                            predictionMode ?
+                                            path === '/predict' ?
                                             [
                                                 '<input class="team-goal-input team-goal-input-team1-goals prediction-match-' + v.number + '" data-match-team="team1-goals" data-match-number="' + v.number + '" type="text"' + disabled + ' />'
                                             ].join('') :
@@ -256,7 +254,7 @@
                                             ].join(''),
                                         '</div>',
                                         '<div class="match-result-score">',
-                                            predictionMode ?
+                                            path === '/predict' ?
                                             [
                                                 '<input class="team-goal-input team-goal-input-team2-goals prediction-match-' + v.number + '" data-match-team="team2-goals" data-match-number="' + v.number + '" type="text"' + disabled + ' />'
                                             ].join('') :
@@ -270,7 +268,7 @@
                                     '</div>',
                                     '<div class="match-result">',
                                         '<div class="match-result-score">',
-                                            predictionMode ?
+                                            path === '/predict' ?
                                             [
                                                 '<input class="team-goal-input team-goal-input-team1-penalty-goals prediction-match-' + v.number + '" data-match-team="team1-penalty-goals" data-match-number="' + v.number + '" type="text"' + disabled + ' />'
                                             ].join('') :
@@ -282,7 +280,7 @@
                                             ].join(''),
                                         '</div>',
                                         '<div class="match-result-score">',
-                                            predictionMode ?
+                                            path === '/predict' ?
                                             [
                                                 '<input class="team-goal-input team-goal-input-team2-penalty-goals prediction-match-' + v.number + '" data-match-team="team2-penalty-goals" data-match-number="' + v.number + '" type="text"' + disabled + ' />'
                                             ].join('') :
@@ -301,7 +299,7 @@
                 });
             });
         }).then(function () {
-            if (predictionMode) {
+            if (path === '/predict') {
                 $.get('/api/predictions', function (data) {
                     $.each(data, function (key, value) {
                         $('.team-goal-input.team-goal-input-team1-goals.prediction-match-' + value.number).val(value.team1Goals != null ? value.team1Goals : '');
@@ -314,7 +312,7 @@
         });
     };
 
-    if (predictionMode) {
+    if (path === '/predict') {
         $('.save-match-predictions').click(function (el) {
             el.preventDefault();
             el.stopPropagation();
@@ -354,8 +352,8 @@
         });
     }
 
-    if (leaderboardMode) {
-        // populate KO stages
+    if (path === '/leaderboard') {
+        // populate leaderboard list
         $.get('/api/leaderboard', function (data) {
             $.each(data, function (key, value) {
                 $('.leaderboards tbody').append($([
@@ -365,14 +363,33 @@
                             '<img class="user-avatar" src="' + value.photo + '" title="' + value.fullName + '" />',
                             value.fullName,
                         '</td>',
-                        '<td>', value.points, '</td>',
+                        '<td class="text-center">', value.points, '</td>',
                     '</tr>'
                 ].join('')));
             });
         });
     }
 
-    if (matchesMode) {
+    if (path === '/teams') {
+        // populate teams
+        $.get('/api/teams?sort=rank', function (data) {
+            $.each(data, function (key, value) {
+                $('.teams tbody').append($([
+                    '<tr>',
+                        '<th class="text-center" scope="row">' + (key + 1) + '</th>',
+                        '<td>',
+                            '<img src="' + value.country.flag + '" class="flag" />',
+                            '<span>' + value.country.name + '</span>',
+                        '</td>',
+                        '<td class="text-center">', value.fifaRank, '</td>',
+                        '<td class="text-center">', value.fifaScore, '</td>',
+                    '</tr>'
+                ].join('')));
+            });
+        });
+    }
+
+    if (path === '/matches') {
         // populate KO stages
         $.get('/api/matches?sort=date', function (data) {
             var stage = null;
