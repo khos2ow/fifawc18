@@ -33,7 +33,7 @@ public interface IMatch {
     Integer getTeam2PenaltyGoals();
 
     Date getMatchDate();
-    
+
     default Result getResult() {
         if (getTeam1() == null || getTeam2() == null) {
             return Result.NA;
@@ -47,7 +47,10 @@ public interface IMatch {
             return Result.DRAW;
         }
 
-        return Result.WIN;
+        if (getTeam1Goals() > getTeam2Goals()) {
+            return Result.TEAM1_WIN;
+        } else {
+            return Result.TEAM2_WIN;
+        }
     }
-
 }

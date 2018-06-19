@@ -31,7 +31,7 @@ public class PostMatchPredictionsScoreAspect {
 
     /**
      * Update User's score points based on the result of the match and their predictions:
-     * 
+     *
      * 12 points: correct result (win, draw)
      * 18 points: correct result and correct goals difference (not applicable for draw match)
      * 32 points: spot on match result (win, draw)
