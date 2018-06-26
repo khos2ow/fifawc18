@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.modelmapper.ModelMapper;
 
 import lombok.Data;
-
+import io.khosrow.fifawc.common.util.IStanding;
 import io.khosrow.fifawc.domain.PredictionStanding;
 import io.khosrow.fifawc.domain.Standing;
 
@@ -20,16 +20,13 @@ public class StandingDTO {
     private Integer goalsAgainst;
     private Integer goalsDiff;
     private Integer points;
+    private boolean proceeded = false;
 
-    public static StandingDTO of(Standing standing) {
+    public static <T extends IStanding> StandingDTO of(T standing) {
         return new ModelMapper().map(standing, StandingDTO.class);
     }
 
     public static StandingDTO of(Optional<Standing> standing) {
         return of(standing.orElse(Standing.NULL));
-    }
-
-    public static StandingDTO of(PredictionStanding standing) {
-        return new ModelMapper().map(standing, StandingDTO.class);
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import io.khosrow.fifawc.common.dto.StandingDTO;
+import io.khosrow.fifawc.common.util.IStanding;
 import io.khosrow.fifawc.domain.Match;
 import io.khosrow.fifawc.domain.Standing;
 import io.khosrow.fifawc.domain.Team;
@@ -44,19 +45,26 @@ public class StandingService {
      * @return list of StandingDTO
      */
     public List<StandingDTO> getStandingByGroupId(Integer id, User user) {
+        final List<? extends IStanding> standings;
+
         if (user == null) {
-            return repository.findByGroupId(id)
-                    .stream()
-                    .sorted()
-                    .map(StandingDTO::of)
-                    .collect(Collectors.toList());
+            standings = repository.findByGroupId(id);
         } else {
-            return predictionStandingRepository.findByGroupIdAndUserId(id, user.getId())
-                    .stream()
-                    .sorted()
-                    .map(StandingDTO::of)
-                    .collect(Collectors.toList());
+            standings = predictionStandingRepository.findByGroupIdAndUserId(id, user.getId());
         }
+
+        List<StandingDTO> dtos = standings
+                                    .stream()
+                                    .sorted()
+                                    .map(StandingDTO::of)
+                                    .collect(Collectors.toList());
+
+        if (isGroupStageFinished(standings)) {
+            dtos.get(0).setProceeded(true);
+            dtos.get(1).setProceeded(true);
+        }
+
+        return dtos;
     }
 
     /**
@@ -79,12 +87,7 @@ public class StandingService {
                                     .sorted()
                                     .collect(Collectors.toList());
 
-        Standing notCompletedMatch = standing.stream()
-                                        .filter(s -> s.getGames() < 3)
-                                        .findAny()
-                                        .orElse(null);
-
-        return notCompletedMatch != null ? Pair.of(Team.NULL, Team.NULL) : Pair.of(standing.get(0).getTeam(), standing.get(1).getTeam());
+        return !isGroupStageFinished(standing) ? Pair.of(Team.NULL, Team.NULL) : Pair.of(standing.get(0).getTeam(), standing.get(1).getTeam());
     }
 
     /**
@@ -120,5 +123,12 @@ public class StandingService {
 
             repository.save(entity);
         }
+    }
+
+    private <T extends IStanding> boolean isGroupStageFinished(List<T> standings) {
+        return !standings.stream()
+                        .filter(s -> s.getGames() < 3)
+                        .findAny()
+                        .isPresent();
     }
 }

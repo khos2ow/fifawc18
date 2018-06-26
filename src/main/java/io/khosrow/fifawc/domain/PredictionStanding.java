@@ -14,10 +14,12 @@ import javax.persistence.Table;
 import lombok.Data;
 import lombok.experimental.NonFinal;
 
+import io.khosrow.fifawc.common.util.IStanding;
+
 @Entity
 @Table(name = "predictions_standing")
 @Data
-public class PredictionStanding implements Comparable<PredictionStanding> {
+public class PredictionStanding extends IStanding implements Comparable<PredictionStanding> {
     public static final PredictionStanding NULL = new PredictionStanding();
 
     @Id

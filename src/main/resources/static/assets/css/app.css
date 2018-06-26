@@ -437,6 +437,9 @@ header .header-content .header-content-inner p {
 .group-standing {
     overflow-x: auto;
 }
+.group-standing .proceeded {
+    background: #eafbff;
+}
 .group-standing .standing-team {
     min-width: 150px;
 }

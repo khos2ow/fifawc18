@@ -101,8 +101,10 @@
     var populateStandings = function (key, value) {
         // group standing table
         $.each(value.standing, function (k, v) {
+            var proceeded = v.proceeded ? ' class="proceeded"' : '';
+
             $('.tab-pane#' + value.uuid + ' .group-standing .table tbody').append($([
-                '<tr>',
+                '<tr' + proceeded + '>',
                     '<th class="text-center" scope="row">' + (k + 1) + '</th>',
                     '<td>',
                         '<img src="' + v.team.country.flag + '" style="width: 20px; margin-right: 5px;" />',
