@@ -62,7 +62,7 @@ public class PostMatchPredictionsScoreAspect {
                         if (match.getTeam1Goals() == prediction.getTeam1Goals() && match.getTeam2Goals() == prediction.getTeam2Goals()) {
                             // exact result
                             points = 32;
-                        } else if (match.getTeam1Goals() - match.getTeam2Goals() == prediction.getTeam1Goals() - prediction.getTeam1Goals()) {
+                        } else if (match.getTeam1Goals() - match.getTeam2Goals() == prediction.getTeam1Goals() - prediction.getTeam2Goals()) {
                             // correct result and correct goals difference
                             points = 18;
                         } else {
