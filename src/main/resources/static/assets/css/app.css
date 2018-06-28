@@ -524,6 +524,9 @@ header .header-content .header-content-inner p {
     font-weight: bold;
     width: 8%;
 }
+.matches.table .match-number {
+    width: 5%;
+}
 
 .match-time {
     text-align: center;
