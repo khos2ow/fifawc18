@@ -12,6 +12,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.NonFinal;
 
 import io.khosrow.fifawc.common.util.IStanding;
@@ -19,6 +20,7 @@ import io.khosrow.fifawc.common.util.IStanding;
 @Entity
 @Table(name = "predictions_standing")
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class PredictionStanding extends IStanding implements Comparable<PredictionStanding> {
     public static final PredictionStanding NULL = new PredictionStanding();
 
