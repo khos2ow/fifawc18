@@ -14,6 +14,8 @@ import io.khosrow.fifawc.common.util.Stage;
 import io.khosrow.fifawc.domain.Match;
 import io.khosrow.fifawc.domain.Team;
 import io.khosrow.fifawc.repo.MatchRepository;
+import io.khosrow.fifawc.repo.PredictionRepository;
+import io.khosrow.fifawc.service.PredictionService;
 import io.khosrow.fifawc.service.StandingService;
 
 @Aspect
@@ -21,11 +23,15 @@ import io.khosrow.fifawc.service.StandingService;
 public class PostMatchGroupStandingAspect {
     private final StandingService standingService;
     private final MatchRepository matchRepository;
+    private final PredictionService predictionService;
+    private final PredictionRepository predictionRepository;
 
     @Autowired
-    public PostMatchGroupStandingAspect(StandingService standingService, MatchRepository matchRepository) {
+    public PostMatchGroupStandingAspect(StandingService standingService, MatchRepository matchRepository, PredictionService predictionService, PredictionRepository predictionRepository) {
         this.standingService = standingService;
         this.matchRepository = matchRepository;
+        this.predictionService = predictionService;
+        this.predictionRepository = predictionRepository;
     }
 
     @Around("@annotation(io.khosrow.fifawc.common.annotation.UpdateGroupStanding)")
@@ -49,6 +55,8 @@ public class PostMatchGroupStandingAspect {
                     Match nextRoundMatch = team1NextRound.get();
                     nextRoundMatch.setTeam1(proceedNextRound.getFirst());
                     matchRepository.save(nextRoundMatch);
+
+                    updatePredictionsNextRound(nextRoundMatch.getNumber(), proceedNextRound.getFirst(), null);
                 }
 
                 // Team standing #2 proceeded to next round
@@ -58,10 +66,32 @@ public class PostMatchGroupStandingAspect {
                     Match nextRoundMatch = team2NextRound.get();
                     nextRoundMatch.setTeam2(proceedNextRound.getSecond());
                     matchRepository.save(nextRoundMatch);
+
+                    updatePredictionsNextRound(nextRoundMatch.getNumber(), null, proceedNextRound.getSecond());
                 }
             }
         }
 
         return match;
+    }
+
+    /**
+     * Update advanced team to the next round for all the users' predictions
+     *
+     * @param matchNumber to update
+     * @param team1 which advanded to next round (can be null)
+     * @param team2 which advanded to next round (can be null)
+     */
+    private void updatePredictionsNextRound(final String matchNumber, Team team1, Team team2) {
+        predictionService.getAllPredictionsByNumber(matchNumber).forEach(prediction -> {
+            if (team1 != null) {
+                prediction.setTeam1(team1);
+            }
+            if (team2 != null) {
+                prediction.setTeam2(team2);
+            }
+
+            predictionRepository.save(prediction);
+        });
     }
 }

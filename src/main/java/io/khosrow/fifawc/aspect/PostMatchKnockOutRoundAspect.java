@@ -13,18 +13,24 @@ import io.khosrow.fifawc.common.util.Stage;
 import io.khosrow.fifawc.domain.Match;
 import io.khosrow.fifawc.domain.Team;
 import io.khosrow.fifawc.repo.MatchRepository;
+import io.khosrow.fifawc.repo.PredictionRepository;
 import io.khosrow.fifawc.repo.TeamRepository;
+import io.khosrow.fifawc.service.PredictionService;
 
 @Aspect
 @Component
 public class PostMatchKnockOutRoundAspect {
     private final MatchRepository matchRepository;
     private final TeamRepository teamRepository;
+    private final PredictionService predictionService;
+    private final PredictionRepository predictionRepository;
 
     @Autowired
-    public PostMatchKnockOutRoundAspect(MatchRepository matchRepository, TeamRepository teamRepository) {
+    public PostMatchKnockOutRoundAspect(MatchRepository matchRepository, TeamRepository teamRepository, PredictionService predictionService, PredictionRepository predictionRepository) {
         this.matchRepository = matchRepository;
         this.teamRepository = teamRepository;
+        this.predictionService = predictionService;
+        this.predictionRepository = predictionRepository;
     }
 
     @Around("@annotation(io.khosrow.fifawc.common.annotation.UpdateKnockOutRound)")
@@ -67,6 +73,8 @@ public class PostMatchKnockOutRoundAspect {
             Match nextRoundMatch = nextRound.get();
             nextRoundMatch.setTeam1(qualifiedTeam);
             matchRepository.save(nextRoundMatch);
+
+            updatePredictionsNextRound(nextRoundMatch.getNumber(), qualifiedTeam, null);
         } else {
             nextRound = matchRepository.findByTeam2Indicator(indicator + match.getNumber());
 
@@ -74,7 +82,29 @@ public class PostMatchKnockOutRoundAspect {
                 Match nextRoundMatch = nextRound.get();
                 nextRoundMatch.setTeam2(qualifiedTeam);
                 matchRepository.save(nextRoundMatch);
+
+                updatePredictionsNextRound(nextRoundMatch.getNumber(), null, qualifiedTeam);
             }
         }
+    }
+
+    /**
+     * Update advanced team to the next round for all the users' predictions
+     *
+     * @param matchNumber to update
+     * @param team1 which advanded to next round (can be null)
+     * @param team2 which advanded to next round (can be null)
+     */
+    private void updatePredictionsNextRound(final String matchNumber, Team team1, Team team2) {
+        predictionService.getAllPredictionsByNumber(matchNumber).forEach(prediction -> {
+            if (team1 != null) {
+                prediction.setTeam1(team1);
+            }
+            if (team2 != null) {
+                prediction.setTeam2(team2);
+            }
+
+            predictionRepository.save(prediction);
+        });
     }
 }

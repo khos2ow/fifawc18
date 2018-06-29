@@ -154,103 +154,14 @@ public class PredictionService {
 
         resetPredictionStandings(user);
 
-        // update group standing and knock-out stages
-        List<Prediction> findByUser = repository.findByUser(user);
-
-        findByUser.forEach(prediction -> {
-            // update group standings
-            if (prediction.getStage().equals(Stage.GROUPS)) {
-                Pair<Team, Team> proceedNextRound = updateStanding(prediction, user);
-
-                // update proceeded team to the next round (if possible)
-                if (proceedNextRound.getFirst() != Team.NULL && proceedNextRound.getSecond() != Team.NULL) {
-                    String groupName = prediction.getGroup().getName();
-
-                    // Team standing #1 proceeded to next round
-                    Optional<Prediction> team1NextRound = repository.findByTeam1IndicatorAndUserId("1" + groupName, user.getId());
-
-                    if (team1NextRound.isPresent()) {
-                        Prediction nextRoundMatch = team1NextRound.get();
-                        nextRoundMatch.setTeam1(proceedNextRound.getFirst());
-                        repository.save(nextRoundMatch);
-                    }
-
-                    // Team standing #2 proceeded to next round
-                    Optional<Prediction> team2NextRound = repository.findByTeam2IndicatorAndUserId("2" + groupName, user.getId());
-
-                    if (team2NextRound.isPresent()) {
-                        Prediction nextRoundMatch = team2NextRound.get();
-                        nextRoundMatch.setTeam2(proceedNextRound.getSecond());
-                        repository.save(nextRoundMatch);
-                    }
+        // update group standing based on predictions on user
+        repository.findByUser(user)
+            .forEach(prediction -> {
+                // update group standings
+                if (prediction.getStage().equals(Stage.GROUPS)) {
+                    updateStanding(prediction, user);
                 }
-            }
-
-            // update knock out stages
-            else {
-                // Winner Team proceeded to next round
-                Optional<Prediction> nextRound = repository.findByTeam1IndicatorAndUserId("W" + prediction.getNumber(), user.getId());
-                Team winner = null;
-
-                if (prediction.getTeam1() == null || prediction.getTeam2() == null) {
-                    return;
-                }
-                if (prediction.getTeam1Goals() == null || prediction.getTeam2Goals() == null) {
-                    return;
-                } else {
-                    if (prediction.getTeam1PenaltyGoals() == null || prediction.getTeam1PenaltyGoals() == null) {
-                        return;
-                    }
-                }
-
-                if (prediction.getTeam1Goals() == prediction.getTeam2Goals()) {
-                    winner = prediction.getTeam1PenaltyGoals() > prediction.getTeam2PenaltyGoals() ? prediction.getTeam1() : prediction.getTeam2();
-                } else {
-                    winner = prediction.getTeam1Goals() > prediction.getTeam2Goals() ? prediction.getTeam1() : prediction.getTeam2();
-                }
-
-                if (nextRound.isPresent()) {
-                    Prediction nextRoundMatch = nextRound.get();
-                    nextRoundMatch.setTeam1(winner);
-                    repository.save(nextRoundMatch);
-                } else {
-                    nextRound = repository.findByTeam2IndicatorAndUserId("W" + prediction.getNumber(), user.getId());
-
-                    if (nextRound.isPresent()) {
-                        Prediction nextRoundMatch = nextRound.get();
-                        nextRoundMatch.setTeam2(winner);
-                        repository.save(nextRoundMatch);
-                    }
-                }
-
-                // Loser Team will proceed to playoff *only* if stage is semi-finals
-                if (prediction.getStage().equals(Stage.SEMI_FINALS)) {
-                    // Winner Team proceeded to next round
-                    Optional<Prediction> playoffRound = repository.findByTeam1IndicatorAndUserId("L" + prediction.getNumber(), user.getId());
-                    Team loser = null;
-
-                    if (prediction.getTeam1Goals() == prediction.getTeam2Goals()) {
-                        loser = prediction.getTeam1PenaltyGoals() < prediction.getTeam2PenaltyGoals() ? prediction.getTeam1() : prediction.getTeam2();
-                    } else {
-                        loser = prediction.getTeam1Goals() < prediction.getTeam2Goals() ? prediction.getTeam1() : prediction.getTeam2();
-                    }
-
-                    if (playoffRound.isPresent()) {
-                        Prediction nextRoundMatch = playoffRound.get();
-                        nextRoundMatch.setTeam1(loser);
-                        repository.save(nextRoundMatch);
-                    } else {
-                        playoffRound = repository.findByTeam2IndicatorAndUserId("L" + prediction.getNumber(), user.getId());
-
-                        if (playoffRound.isPresent()) {
-                            Prediction nextRoundMatch = playoffRound.get();
-                            nextRoundMatch.setTeam2(loser);
-                            repository.save(nextRoundMatch);
-                        }
-                    }
-                }
-            }
-        });
+            });
 
         return true;
     }
