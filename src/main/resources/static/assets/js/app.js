@@ -268,32 +268,26 @@
                                             ].join(''),
                                         '</div>',
                                     '</div>',
-                                    '<div class="match-result">',
-                                        '<div class="match-result-score">',
-                                            path === '/predict' ?
-                                            [
-                                                '<input class="team-goal-input team-goal-input-team1-penalty-goals prediction-match-' + v.number + '" data-match-team="team1-penalty-goals" data-match-number="' + v.number + '" type="text"' + disabled + ' />'
-                                            ].join('') :
-                                            v.team1PenaltyGoals == null ? '&nbsp;' :
-                                            [
-                                                team1Winner ? '<b>' : '',
-                                                v.team1PenaltyGoals,
-                                                team1Winner ? '</b>' : ''
-                                            ].join(''),
-                                        '</div>',
-                                        '<div class="match-result-score">',
-                                            path === '/predict' ?
-                                            [
-                                                '<input class="team-goal-input team-goal-input-team2-penalty-goals prediction-match-' + v.number + '" data-match-team="team2-penalty-goals" data-match-number="' + v.number + '" type="text"' + disabled + ' />'
-                                            ].join('') :
-                                            v.team2PenaltyGoals == null ? '&nbsp;' :
-                                            [
-                                                team2Winner ? '<b>' : '',
-                                                v.team2PenaltyGoals,
-                                                team2Winner ? '</b>' : ''
-                                            ].join(''),
-                                        '</div>',
-                                    '</div>',
+                                    path === '/predict' ? '' : [
+                                        '<div class="match-result">',
+                                            '<div class="match-result-score">',
+                                                v.team1PenaltyGoals == null ? v.team1Goals == null || v.team2Goals == null ? '&nbsp;' : '-' :
+                                                [
+                                                    team1Winner ? '<b>' : '',
+                                                    v.team1PenaltyGoals,
+                                                    team1Winner ? '</b>' : ''
+                                                ].join(''),
+                                            '</div>',
+                                            '<div class="match-result-score">',
+                                                v.team2PenaltyGoals == null ? v.team1Goals == null || v.team2Goals == null ? '&nbsp;' : '-' :
+                                                [
+                                                    team2Winner ? '<b>' : '',
+                                                    v.team2PenaltyGoals,
+                                                    team2Winner ? '</b>' : ''
+                                                ].join(''),
+                                            '</div>',
+                                        '</div>'
+                                    ].join(''),
                                 '</div>',
                             '</div>'
                         ].join('')));
