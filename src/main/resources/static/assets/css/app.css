@@ -524,8 +524,26 @@ header .header-content .header-content-inner p {
     font-weight: bold;
     width: 8%;
 }
+
+.matches.table td {
+    padding-left: 0;
+    padding-right: 0;
+}
 .matches.table .match-number {
     width: 5%;
+}
+.matches.table .match-result {
+    padding-left: 0;
+    padding-right: 0;
+}
+@media (max-width: 1199px) {
+    .matches.table .match-home,
+    .matches.table .match-away {
+        width: 40%;
+    }
+    .matches.table .match-result {
+        width: 20%;
+    }
 }
 
 .match-time {

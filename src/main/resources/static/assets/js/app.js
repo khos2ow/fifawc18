@@ -150,7 +150,7 @@
                                     '-',
                                     '<input class="team-goal-input team-goal-input-team2-goals prediction-match-' + v.number + '" data-match-team="team2-goals" data-match-number="' + v.number + '" type="text"' + disabled + ' />'
                                 ].join('') :
-                                v.team1Goals == null || v.team2Goals == null ? '-' : v.team1Goals + '-' + v.team2Goals,
+                                v.team1Goals == null || v.team2Goals == null ? '-' : v.team1Goals + ' - ' + v.team2Goals,
                             '</div>',
                             '<div class="col-xs-5 col-lg-4 match-away text-left">',
                                 v.team1Goals != null && v.team2Goals != null && v.team2Goals > v.team1Goals ? '<b>' : '',
@@ -436,13 +436,21 @@
                                 ].join(''),
                             '</div>',
                             '<div class="col-xs-2 col-lg-1 match-result text-center">',
-                                value.team1Goals == null || value.team2Goals == null ? '-' : value.team1Goals + '-' + value.team2Goals,
-                                value.stage === 'Group Phase' ? '' : [
-                                    (value.team1Goals != null && value.team2Goals != null) && (value.team1Goals == value.team2Goals) ? [
-                                        '<br />',
-                                        value.team1PenaltyGoals == null || value.team2PenaltyGoals == null ? '-' : value.team1PenaltyGoals + '-' + value.team2PenaltyGoals
-                                    ].join('') : ''
-                                ],
+                                value.team1Goals == null || value.team2Goals == null ? '-' : [
+                                    value.stage === 'Group Phase' ? [
+                                        value.team1Goals + ' - ' + value.team2Goals
+                                    ].join('') : [
+                                        value.team1Goals == value.team2Goals ? [
+                                            value.team1PenaltyGoals == null || value.team2PenaltyGoals == null ? [
+                                                value.team1Goals + ' - ' + value.team2Goals
+                                            ] : [
+                                                value.team1Goals + ' (' + value.team1PenaltyGoals + ') -  (' + value.team2PenaltyGoals + ') ' + value.team2Goals
+                                            ].join('')
+                                        ].join('') : [
+                                            value.team1Goals + ' - ' + value.team2Goals
+                                        ].join('')
+                                    ].join('')
+                                ].join(''),
                             '</div>',
                             '<div class="col-xs-5 col-lg-4 match-away text-left">',
                                 value.team2 == null ? [
