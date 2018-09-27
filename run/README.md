@@ -7,7 +7,7 @@ There are two options to choose to run `fifawc18` components and services.
     - app
     - mysql
 
->```
+```
 $: docker-compose -f compose-app.yml up -d
 ```
 
@@ -20,6 +20,6 @@ $: docker-compose -f compose-app.yml up -d
     - logstash
     - kibana
 
->```
+```
 $: docker-compose -f compose-app.yml -f compose-logging.yml up -d
 ```
